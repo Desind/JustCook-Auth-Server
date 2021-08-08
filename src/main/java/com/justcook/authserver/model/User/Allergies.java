@@ -1,4 +1,4 @@
-package com.justcook.authserver.model;
+package com.justcook.authserver.model.User;
 
 public enum Allergies {
     EGGS,

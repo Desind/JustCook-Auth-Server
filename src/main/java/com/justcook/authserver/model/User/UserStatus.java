@@ -1,6 +1,6 @@
 package com.justcook.authserver.model.User;
 
-public enum Status {
+public enum UserStatus {
     NEW,
     CONFIRMED,
     SUSPENDED,

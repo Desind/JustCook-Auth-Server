@@ -1,6 +1,6 @@
-package com.justcook.authserver.model.User;
+package com.justcook.authserver.model;
 
-public enum Allergies {
+public enum Allergens {
     EGGS,
     LUPINE,
     MILK,

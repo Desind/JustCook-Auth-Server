@@ -2,6 +2,7 @@ package com.justcook.authserver.model.User;
 
 import com.justcook.authserver.model.Allergens;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,9 +12,11 @@ import java.util.List;
 
 @Data
 @Document
-public class User {
+@NoArgsConstructor
+public class CookUser {
     @Id
     private String id;
+    @Indexed(unique = true)
     private String username;
     @Indexed(unique = true)
     private String email;
@@ -23,13 +26,13 @@ public class User {
     private UserStatus status;
     private List<Allergens> allergies;
 
-    public User(String username,
-                String email,
-                String password,
-                LocalDateTime registrationDate,
-                UserType userType,
-                UserStatus status,
-                List<Allergens> allergies) {
+    public CookUser(String username,
+                    String email,
+                    String password,
+                    LocalDateTime registrationDate,
+                    UserType userType,
+                    UserStatus status,
+                    List<Allergens> allergies) {
         this.username = username;
         this.email = email;
         this.password = password;

@@ -1,4 +1,4 @@
-package com.justcook.authserver.rest;
+package com.justcook.authserver.api;
 
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.service.RecipeService;

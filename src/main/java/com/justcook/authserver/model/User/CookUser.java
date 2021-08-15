@@ -22,7 +22,7 @@ public class CookUser {
     private String email;
     private String password;
     private LocalDateTime registrationDate;
-    private UserType userType;
+    private List<UserRole> userRoles;
     private UserStatus status;
     private List<Allergens> allergies;
 
@@ -30,14 +30,14 @@ public class CookUser {
                     String email,
                     String password,
                     LocalDateTime registrationDate,
-                    UserType userType,
+                    List<UserRole> userRole,
                     UserStatus status,
                     List<Allergens> allergies) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.registrationDate = registrationDate;
-        this.userType = userType;
+        this.userRoles = userRole;
         this.status = status;
         this.allergies = allergies;
     }

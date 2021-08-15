@@ -1,14 +1,14 @@
 package com.justcook.authserver.service.interfaces;
 
 import com.justcook.authserver.model.User.CookUser;
-import com.justcook.authserver.model.User.UserType;
+import com.justcook.authserver.model.User.UserRole;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CookUserService {
     CookUser saveUser(CookUser cookUser);
-    void setUserType(String email, UserType userType);
+    void giveUserRole(String email, String userRole);
     Optional<CookUser> getCookUserById(String id);
     CookUser getCookUserByEmail(String email);
     CookUser getCookUserByUsername(String username);

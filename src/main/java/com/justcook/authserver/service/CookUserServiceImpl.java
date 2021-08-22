@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class CookUserServiceImpl implements CookUserService, UserDetailsService {
 
     final CookUserRepository cookUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -34,7 +36,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
             log.error("User not found");
             throw new UsernameNotFoundException("User not found");
         } else {
-            log.info("User found" + cookUser.getUsername());
+            log.info("User found: " + cookUser.getUsername());
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (UserRole role : cookUser.getUserRoles()) {
@@ -49,6 +51,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
         cookUser.setRegistrationDate(LocalDateTime.now());
         cookUser.setStatus(UserStatus.NEW);
         cookUser.setAllergies(List.of());
+        cookUser.setPassword(passwordEncoder.encode(cookUser.getPassword()));
         return cookUserRepository.save(cookUser);
     }
 

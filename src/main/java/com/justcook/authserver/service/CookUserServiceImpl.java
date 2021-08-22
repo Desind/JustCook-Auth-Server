@@ -7,18 +7,41 @@ import com.justcook.authserver.repository.CookUserRepository;
 import com.justcook.authserver.service.interfaces.CookUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CookUserServiceImpl implements CookUserService {
+public class CookUserServiceImpl implements CookUserService, UserDetailsService {
 
     final CookUserRepository cookUserRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        CookUser cookUser = cookUserRepository.findByEmail(email);
+        if(cookUser == null) {
+            log.error("User not found");
+            throw new UsernameNotFoundException("User not found");
+        } else {
+            log.info("User found" + cookUser.getUsername());
+        }
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (UserRole role : cookUser.getUserRoles()) {
+            authorities.add(new SimpleGrantedAuthority(role.name()));
+        }
+        return new org.springframework.security.core.userdetails.User(cookUser.getUsername(), cookUser.getPassword(), authorities);
+    }
 
     @Override
     public CookUser saveUser(CookUser cookUser) {

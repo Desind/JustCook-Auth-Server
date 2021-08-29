@@ -42,7 +42,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
         for (UserRole role : cookUser.getUserRoles()) {
             authorities.add(new SimpleGrantedAuthority(role.name()));
         }
-        return new org.springframework.security.core.userdetails.User(cookUser.getUsername(), cookUser.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(cookUser.getEmail(), cookUser.getPassword(), authorities);
     }
 
     @Override

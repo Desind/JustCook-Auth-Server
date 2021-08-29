@@ -7,11 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -28,7 +26,10 @@ public class CookUserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<CookUser>> getAllCookUsers(){
+    public ResponseEntity<List<CookUser>> getAllCookUsers(HttpServletRequest request){
+        //PRZYKŁADOWE ODEBRANIE INFORMACJI O UŻYTKOWNIKU Z TOKENA
+        String username = String.valueOf(request.getAttribute("username"));
+        log.warn("Username from token: " + username);
         List<CookUser> cookUsers = cookUserService.getCookUsers();
         return ResponseEntity.status(200).body(cookUsers);
     }

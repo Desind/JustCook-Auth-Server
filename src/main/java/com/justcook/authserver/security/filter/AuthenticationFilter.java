@@ -60,9 +60,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
         Map<String, String> token = new HashMap<>();
-        token.put("accessToken", accessToken);
-        token.put("refreshToken", refreshToken);
-        token.put("expirationDate", date.toString());
+        token.put("access_token", accessToken);
+        token.put("refresh_token", refreshToken);
+        token.put("expires_in", String.valueOf(4 * 60 * 60));
+        token.put("token_type", "Bearer ");
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), token);
     }

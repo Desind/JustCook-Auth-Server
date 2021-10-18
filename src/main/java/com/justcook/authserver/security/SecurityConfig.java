@@ -25,6 +25,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder bCryptPasswordEncoder;
 
+    private static final String[] AUTH_WHITELIST = {
+            // -- Swagger UI v2
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            // -- Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            // other public endpoints of your API may be appended to this array
+            "/api/user/new",
+            "/api/user/refreshtoken"
+    };
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -34,8 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/api/user/new").permitAll();
-        http.authorizeRequests().antMatchers("/api/user/refreshtoken").permitAll();
+        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/**").hasAnyAuthority(UserRole.USER.name());
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/recipes/**").hasAnyAuthority(UserRole.USER.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/recipe/new").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());

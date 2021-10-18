@@ -59,41 +59,6 @@ public class CookUserController {
 
     @GetMapping("/refreshtoken")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
-            try{
-                String refreshToken = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(refreshToken);
-                String username = decodedJWT.getSubject();
-                CookUser user = cookUserService.getCookUserByEmail(username);
-                log.warn("User: {}", user.toString());
-                Date date = new Date(System.currentTimeMillis() + 4 * 60 * 60 * 1000);
-                String accessToken = JWT.create()
-                        .withSubject(user.getUsername())
-                        .withExpiresAt(date)
-                        .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", user.getUserRoles().stream().map(UserRole::name).collect(Collectors.toList()))
-                        .sign(algorithm);
-                Map<String, String> newToken = new HashMap<>();
-                newToken.put("access_token", accessToken);
-                newToken.put("refresh_token", refreshToken);
-                newToken.put("expires_in", String.valueOf(4 * 60 * 60));
-                newToken.put("token_type", "Bearer ");
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), newToken);
-            }catch(Exception e){
-                log.error("Error logging in : {}", e.getMessage());
-                response.setHeader("error", e.getMessage());
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                Map<String, String> error = new HashMap<>();
-                error.put("error_message: ", e.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
-            }
-        }else{
-            throw new RuntimeException("Refresh token is missing");
-        }
+        cookUserService.tokenRefresh(request, response);
     }
 }

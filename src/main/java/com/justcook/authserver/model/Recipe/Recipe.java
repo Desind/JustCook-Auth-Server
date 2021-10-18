@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -13,18 +14,28 @@ public class Recipe {
     @Id
     private String id;
     private String title;
+    private LocalDateTime creationDate;
     private List<String> ingredients;
     private List<String> steps;
     private String owner;
     private List<Allergens> allergens;
+    private String[] images;
     private RecipeDifficulty recipeDifficulty;
 
-    public Recipe(String title, List<String> ingredients, List<String> steps, String owner, List<Allergens> allergens, RecipeDifficulty recipeDifficulty) {
+    public Recipe(String title,
+                  List<String> ingredients,
+                  List<String> steps, String owner,
+                  List<Allergens> allergens,
+                  RecipeDifficulty recipeDifficulty,
+                  String[] images,
+                  LocalDateTime creationDate) {
         this.title = title;
         this.ingredients = ingredients;
         this.steps = steps;
         this.owner = owner;
         this.allergens = allergens;
+        this.images = images;
         this.recipeDifficulty = recipeDifficulty;
+        this.creationDate = creationDate;
     }
 }

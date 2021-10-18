@@ -1,31 +1,39 @@
 package com.justcook.authserver.api;
 
+import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.model.Recipe.Recipe;
+import com.justcook.authserver.service.CookUserServiceImpl;
 import com.justcook.authserver.service.RecipeServiceImpl;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/recipe")
 @AllArgsConstructor
+@Slf4j
 public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
+    private final CookUserServiceImpl cookUserService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Recipe>> getAllRecipes(){
-        List<Recipe> allRecipes = recipeService.getAllRecipes();
+    @GetMapping("/all/{page}")
+    public ResponseEntity<List<Recipe>> getAllRecipes(@PathVariable Integer page){
+        List<Recipe> allRecipes = recipeService.getAllRecipes(page,20);
         return ResponseEntity.status(200).body(allRecipes);
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Object> createNewRecipe(@RequestBody Recipe recipe){
-        System.out.println(recipe.toString());
+    public ResponseEntity<Object> createNewRecipe(HttpServletRequest request, @RequestBody Recipe recipe){
+        String email = String.valueOf(request.getAttribute("username"));
+        String userId = cookUserService.getCookUserByEmail(email).getId();
+        recipe.setOwner(userId);
         recipeService.createNewRecipe(recipe);
         return ResponseEntity.status(201).build();
     }
@@ -39,6 +47,13 @@ public class RecipeController {
     @GetMapping("/owner/{id}")
     public ResponseEntity<List<Recipe>> getRecipesByOwner(@PathVariable String id){
         return ResponseEntity.status(200).body(recipeService.getRecipesByOwner(id));
+    }
+
+    @GetMapping("/recipes/{page}")
+    public ResponseEntity<List<Recipe>> getTest(HttpServletRequest request, @PathVariable Integer page){
+        String email = String.valueOf(request.getAttribute("username"));
+        List<Allergens> alergens = cookUserService.getCookUserByEmail(email).getAllergies();
+        return ResponseEntity.status(200).body(recipeService.getRecipesWithoutAlergens(alergens, page, 20));
     }
 
 }

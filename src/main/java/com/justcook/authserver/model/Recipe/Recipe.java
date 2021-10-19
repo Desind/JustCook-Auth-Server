@@ -19,6 +19,8 @@ public class Recipe {
     private List<String> steps;
     private String owner;
     private List<Allergens> allergens;
+    /*TODO: CZAS TRWANIA, KATEGORIA, KUCHNIA*/
+    //TODO: OCENY UŻYTKOWNIKÓW
     private String[] images;
     private RecipeDifficulty recipeDifficulty;
 

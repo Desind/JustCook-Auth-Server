@@ -24,6 +24,7 @@ public class CookUser {
     private LocalDateTime registrationDate;
     private List<UserRole> userRoles;
     private UserStatus status;
+    //TODO: PROFILOWE, LISTA ULUBIONYCH PRZEPISÓW (ID)
     private List<Allergens> allergies;
 
     public CookUser(String username,

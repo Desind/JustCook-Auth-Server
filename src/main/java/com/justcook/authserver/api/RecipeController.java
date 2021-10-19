@@ -31,6 +31,7 @@ public class RecipeController {
 
     @PostMapping("/new")
     public ResponseEntity<Object> createNewRecipe(HttpServletRequest request, @RequestBody Recipe recipe){
+        //TODO: PRZYJMOWANIE DTO TYLKO Z POLAMI POTRZEBNYMI
         String email = String.valueOf(request.getAttribute("username"));
         String userId = cookUserService.getCookUserByEmail(email).getId();
         recipe.setOwner(userId);

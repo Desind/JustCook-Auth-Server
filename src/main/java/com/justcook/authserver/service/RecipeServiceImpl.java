@@ -1,6 +1,7 @@
 package com.justcook.authserver.service;
 
 import com.justcook.authserver.model.Allergens;
+import com.justcook.authserver.model.Recipe.CategoryCuisineForm;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.repository.RecipeRepository;
 import com.justcook.authserver.service.interfaces.RecipeService;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,5 +41,17 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Recipe> getRecipesWithoutAlergens(List<Allergens> alergens, int page, int records){
         return recipeRepository.findRecipesByAllergensNotContains(alergens).stream().skip((page-1)*records).limit(records).toList();
+    }
+
+    public List<Recipe> getRecipesWithCategoryAndCuisine(CategoryCuisineForm form) {
+        if(form.getCuisines() != null && form.getCategories() == null){
+            return recipeRepository.findRecipesByCuisinesContains(form.getCuisines());
+        }else if(form.getCuisines() == null && form.getCategories() != null){
+            return recipeRepository.findRecipesByCategoriesContains(form.getCategories());
+        }else if(form.getCuisines() == null && form.getCategories() == null){
+            return recipeRepository.findAll();
+        }else{
+            return recipeRepository.findRecipesByCategoriesContainsOrCuisinesContains(form.getCategories(),form.getCuisines());
+        }
     }
 }

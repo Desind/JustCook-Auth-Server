@@ -1,6 +1,7 @@
 package com.justcook.authserver.service.interfaces;
 
 import com.justcook.authserver.model.Allergens;
+import com.justcook.authserver.model.Recipe.CategoryCuisineForm;
 import com.justcook.authserver.model.Recipe.Recipe;
 
 import java.util.List;

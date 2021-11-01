@@ -19,18 +19,25 @@ public class Recipe {
     private List<String> steps;
     private String owner;
     private List<Allergens> allergens;
-    /*TODO: CZAS TRWANIA, KATEGORIA, KUCHNIA*/
+    private List<RecipeCategory> categories;
+    private List<RecipeCuisine> cuisines;
+    private Integer durationTime;
     //TODO: OCENY UŻYTKOWNIKÓW
     private String[] images;
     private RecipeDifficulty recipeDifficulty;
 
     public Recipe(String title,
                   List<String> ingredients,
-                  List<String> steps, String owner,
+                  List<String> steps,
+                  String owner,
                   List<Allergens> allergens,
                   RecipeDifficulty recipeDifficulty,
                   String[] images,
-                  LocalDateTime creationDate) {
+                  LocalDateTime creationDate,
+                  List<RecipeCategory> categories,
+                  List<RecipeCuisine> cuisines,
+                  Integer durationTime
+                  ) {
         this.title = title;
         this.ingredients = ingredients;
         this.steps = steps;
@@ -39,5 +46,8 @@ public class Recipe {
         this.images = images;
         this.recipeDifficulty = recipeDifficulty;
         this.creationDate = creationDate;
+        this.categories = categories;
+        this.cuisines = cuisines;
+        this.durationTime = durationTime;
     }
 }

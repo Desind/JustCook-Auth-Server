@@ -1,6 +1,7 @@
 package com.justcook.authserver.api;
 
 import com.justcook.authserver.model.Allergens;
+import com.justcook.authserver.model.Recipe.CategoryCuisineForm;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.service.CookUserServiceImpl;
 import com.justcook.authserver.service.RecipeServiceImpl;
@@ -51,10 +52,16 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/{page}")
-    public ResponseEntity<List<Recipe>> getTest(HttpServletRequest request, @PathVariable Integer page){
+    public ResponseEntity<List<Recipe>> getRecipePagination(HttpServletRequest request, @PathVariable Integer page){
         String email = String.valueOf(request.getAttribute("username"));
         List<Allergens> alergens = cookUserService.getCookUserByEmail(email).getAllergies();
         return ResponseEntity.status(200).body(recipeService.getRecipesWithoutAlergens(alergens, page, 20));
     }
+
+    @PostMapping("/test")
+    public ResponseEntity<List<Recipe>> getTest(@RequestBody CategoryCuisineForm form){
+        return ResponseEntity.status(200).body(recipeService.getRecipesWithCategoryAndCuisine(form));
+    }
+
 
 }

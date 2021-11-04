@@ -14,4 +14,9 @@ public class ProductServiceImpl implements ProductService {
     public Product findProductByEan(String ean) {
         return productRepository.findByEan(ean);
     }
+
+    @Override
+    public Product addProduct(Product product) {
+        return productRepository.insert(product);
+    }
 }

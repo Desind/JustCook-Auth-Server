@@ -43,6 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.findRecipesByAllergensNotContains(alergens).stream().skip((page-1)*records).limit(records).toList();
     }
 
+    @Override
     public List<Recipe> getRecipesWithCategoryAndCuisine(CategoryCuisineForm form) {
         if(form.getCuisines() != null && form.getCategories() == null){
             return recipeRepository.findRecipesByCuisinesContains(form.getCuisines());
@@ -53,5 +54,10 @@ public class RecipeServiceImpl implements RecipeService {
         }else{
             return recipeRepository.findRecipesByCategoriesContainsOrCuisinesContains(form.getCategories(),form.getCuisines());
         }
+    }
+
+    @Override
+    public List<Recipe> getRecipesWithIngredients(List<String> ingredients) {
+        return recipeRepository.findRecipesByIngredients(ingredients);
     }
 }

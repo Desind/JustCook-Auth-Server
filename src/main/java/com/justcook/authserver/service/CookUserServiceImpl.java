@@ -13,7 +13,6 @@ import com.justcook.authserver.service.interfaces.CookUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -133,4 +132,32 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
         }
     }
 
+    @Override
+    public void likeRecipe(String email, String id) {
+        CookUser cookUser = cookUserRepository.findByEmail(email);
+        try{
+            if(!cookUser.getFavouriteRecipes().contains(id)){
+                cookUser.getFavouriteRecipes().add(id);
+                cookUserRepository.save(cookUser);
+            }
+        }catch(Exception e){
+            List<String> likedRecipes = new ArrayList<>();
+            likedRecipes.add(id);
+            cookUser.setFavouriteRecipes(likedRecipes);
+            cookUserRepository.save(cookUser);
+        }
+
+    }
+
+    @Override
+    public boolean dislikeRecipe(String email, String id) {
+        CookUser cookUser = cookUserRepository.findByEmail(email);
+        if(cookUser.getFavouriteRecipes().contains(id)){
+            cookUser.getFavouriteRecipes().remove(id);
+            cookUserRepository.save(cookUser);
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

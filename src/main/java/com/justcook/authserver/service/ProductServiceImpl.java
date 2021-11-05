@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
+
     private final ProductRepository productRepository;
+
     @Override
     public Product findProductByEan(String ean) {
         return productRepository.findByEan(ean);

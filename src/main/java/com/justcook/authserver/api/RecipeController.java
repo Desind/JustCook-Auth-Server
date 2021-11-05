@@ -58,9 +58,15 @@ public class RecipeController {
         return ResponseEntity.status(200).body(recipeService.getRecipesWithoutAlergens(alergens, page, 20));
     }
 
-    @PostMapping("/test")
-    public ResponseEntity<List<Recipe>> getTest(@RequestBody CategoryCuisineForm form){
+    @PostMapping("/cuisineCategory")
+    public ResponseEntity<List<Recipe>> getRecipesWithCuisineAndCategory(@RequestBody CategoryCuisineForm form){
         return ResponseEntity.status(200).body(recipeService.getRecipesWithCategoryAndCuisine(form));
+    }
+
+    @GetMapping("/withIngredients")
+    public ResponseEntity<List<Recipe>> getRecipesWithIngredients(@RequestParam List<String> ingredients){
+        log.info(String.valueOf(ingredients));
+        return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));
     }
 
 

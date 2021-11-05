@@ -1,7 +1,6 @@
 package com.justcook.authserver.service.interfaces;
 
 import com.justcook.authserver.model.User.CookUser;
-import com.justcook.authserver.model.User.UserRole;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,4 +16,6 @@ public interface CookUserService {
     CookUser getCookUserByUsername(String username);
     List<CookUser> getCookUsers();
     void tokenRefresh(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    void likeRecipe(String email, String id);
+    boolean dislikeRecipe(String email, String id);
 }

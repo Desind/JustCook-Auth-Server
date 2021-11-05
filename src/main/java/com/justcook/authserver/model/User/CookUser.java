@@ -24,22 +24,7 @@ public class CookUser {
     private LocalDateTime registrationDate;
     private List<UserRole> userRoles;
     private UserStatus status;
-    //TODO: PROFILOWE, LISTA ULUBIONYCH PRZEPISÓW (ID)
+    private String image;
+    private List<String> favouriteRecipes;
     private List<Allergens> allergies;
-
-    public CookUser(String username,
-                    String email,
-                    String password,
-                    LocalDateTime registrationDate,
-                    List<UserRole> userRole,
-                    UserStatus status,
-                    List<Allergens> allergies) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.registrationDate = registrationDate;
-        this.userRoles = userRole;
-        this.status = status;
-        this.allergies = allergies;
-    }
 }

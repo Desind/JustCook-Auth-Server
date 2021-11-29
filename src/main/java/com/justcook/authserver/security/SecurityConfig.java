@@ -3,6 +3,7 @@ package com.justcook.authserver.security;
 import com.justcook.authserver.model.User.UserRole;
 import com.justcook.authserver.security.filter.AuthenticationFilter;
 import com.justcook.authserver.security.filter.AuthorizationFilter;
+import com.justcook.authserver.service.interfaces.CookUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,7 @@ import java.util.List;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder bCryptPasswordEncoder;
+    private final CookUserService cookUserService;
 
     private static final String[] AUTH_WHITELIST = {
             // -- Swagger UI v2
@@ -64,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/recipe/new").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product/new").hasAnyAuthority(UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().anyRequest().authenticated();
-        http.addFilter(new AuthenticationFilter(authenticationManagerBean()));
+        http.addFilter(new AuthenticationFilter(authenticationManagerBean(),cookUserService));
         http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

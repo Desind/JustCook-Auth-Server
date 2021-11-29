@@ -1,7 +1,7 @@
 package com.justcook.authserver.api;
 
 import com.justcook.authserver.model.Allergens;
-import com.justcook.authserver.model.Recipe.CategoryCuisineForm;
+import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.service.CookUserServiceImpl;
 import com.justcook.authserver.service.RecipeServiceImpl;
@@ -23,6 +23,7 @@ public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
     private final CookUserServiceImpl cookUserService;
+
 
     @GetMapping("/all/{page}")
     public ResponseEntity<List<Recipe>> getAllRecipes(@PathVariable Integer page){
@@ -59,7 +60,7 @@ public class RecipeController {
     }
 
     @PostMapping("/cuisineCategory")
-    public ResponseEntity<List<Recipe>> getRecipesWithCuisineAndCategory(@RequestBody CategoryCuisineForm form){
+    public ResponseEntity<List<Recipe>> getRecipesWithCuisineAndCategory(@RequestBody CategoryCuisineDto form){
         return ResponseEntity.status(200).body(recipeService.getRecipesWithCategoryAndCuisine(form));
     }
 
@@ -68,6 +69,4 @@ public class RecipeController {
         log.info(String.valueOf(ingredients));
         return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));
     }
-
-
 }

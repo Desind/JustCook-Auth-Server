@@ -1,7 +1,7 @@
 package com.justcook.authserver.service;
 
 import com.justcook.authserver.model.Allergens;
-import com.justcook.authserver.model.Recipe.CategoryCuisineForm;
+import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.repository.RecipeRepository;
 import com.justcook.authserver.service.interfaces.RecipeService;
@@ -45,7 +45,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getRecipesWithCategoryAndCuisine(CategoryCuisineForm form) {
+    public List<Recipe> getRecipesWithCategoryAndCuisine(CategoryCuisineDto form) {
         if(form.getCuisines() != null && form.getCategories() == null){
             return recipeRepository.findRecipesByCuisinesContains(form.getCuisines());
         }else if(form.getCuisines() == null && form.getCategories() != null){

@@ -1,7 +1,8 @@
 package com.justcook.authserver.api;
 
+import com.justcook.authserver.dto.NewUserDto;
 import com.justcook.authserver.model.User.CookUser;
-import com.justcook.authserver.model.User.RoleToUserForm;
+import com.justcook.authserver.dto.RoleToUserDto;
 import com.justcook.authserver.service.interfaces.CookUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,15 @@ import java.util.*;
 public class CookUserController {
     public final CookUserService cookUserService;
 
+
+    //201 poprawne utworzenie użytkownika
+    //403 email albo username zajęte
     @PostMapping("/new")
-    public ResponseEntity<CookUser> saveNewCookUser(@RequestBody CookUser cookUser){
-        cookUserService.saveUser(cookUser);
-        return ResponseEntity.status(201).build();
+    public ResponseEntity<CookUser> saveNewCookUser(@RequestBody NewUserDto newUserDto){
+        if (cookUserService.saveUser(newUserDto) != null){
+            return ResponseEntity.status(201).build();
+        }
+        return ResponseEntity.status(403).build();
     }
 
     @GetMapping("/all")
@@ -35,7 +41,7 @@ public class CookUserController {
     }
 
     @PostMapping("/role/add")
-    public ResponseEntity<?> giveCookUserRole(@RequestBody RoleToUserForm form){
+    public ResponseEntity<?> giveCookUserRole(@RequestBody RoleToUserDto form){
         log.info(form.toString());
         cookUserService.giveUserRole(form.getEmail(), form.getUserRole());
         return ResponseEntity.status(200).build();

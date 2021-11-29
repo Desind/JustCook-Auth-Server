@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.justcook.authserver.dto.NewUserDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.model.User.UserStatus;
 import com.justcook.authserver.model.User.UserRole;
@@ -54,13 +55,20 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
     }
 
     @Override
-    public CookUser saveUser(CookUser cookUser) {
+    public CookUser saveUser(NewUserDto newUserDto) {
+        CookUser cookUser = new CookUser();
+        cookUser.setEmail(newUserDto.getEmail());
+        cookUser.setUsername(newUserDto.getUsername());
         cookUser.setUserRoles(List.of(UserRole.USER));
         cookUser.setRegistrationDate(LocalDateTime.now());
         cookUser.setStatus(UserStatus.NEW);
         cookUser.setAllergies(List.of());
-        cookUser.setPassword(passwordEncoder.encode(cookUser.getPassword()));
-        return cookUserRepository.save(cookUser);
+        cookUser.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
+        try {
+            return cookUserRepository.save(cookUser);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.justcook.authserver.service.interfaces;
 
 import com.justcook.authserver.model.Allergens;
-import com.justcook.authserver.model.Recipe.CategoryCuisineForm;
+import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
 
 import java.util.List;
@@ -12,6 +12,6 @@ public interface RecipeService {
     Recipe getRecipeById(String id);
     List<Recipe> getRecipesByOwner(String id);
     List<Recipe> getRecipesWithoutAlergens(List<Allergens> alergens, int page, int records);
-    List<Recipe> getRecipesWithCategoryAndCuisine(CategoryCuisineForm form);
+    List<Recipe> getRecipesWithCategoryAndCuisine(CategoryCuisineDto form);
     List<Recipe> getRecipesWithIngredients(List<String> ingredients);
 }

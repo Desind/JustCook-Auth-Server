@@ -14,6 +14,7 @@ public class Recipe {
     @Id
     private String id;
     private String title;
+    private String description;
     private LocalDateTime creationDate;
     private List<String> ingredients;
     private List<String> steps;
@@ -27,6 +28,7 @@ public class Recipe {
     private RecipeDifficulty difficulty;
 
     public Recipe(String title,
+                  String description,
                   List<String> ingredients,
                   List<String> steps,
                   String owner,
@@ -39,6 +41,7 @@ public class Recipe {
                   Integer duration
                   ) {
         this.title = title;
+        this.description = description;
         this.ingredients = ingredients;
         this.steps = steps;
         this.owner = owner;

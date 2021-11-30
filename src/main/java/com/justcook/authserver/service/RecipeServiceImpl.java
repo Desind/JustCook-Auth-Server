@@ -40,8 +40,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getRecipesWithoutAlergens(List<Allergens> alergens, int page, int records){
-        return recipeRepository.findRecipesByAllergensNotContains(alergens).stream().skip((page-1)*records).
-                limit(records).collect(Collectors.toList());
+        return recipeRepository.findRecipesByAllergensNotContains(alergens).stream().skip((page-1)*records).toList();
     }
 
     @Override

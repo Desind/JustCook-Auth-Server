@@ -21,22 +21,22 @@ public class Recipe {
     private List<Allergens> allergens;
     private List<RecipeCategory> categories;
     private List<RecipeCuisine> cuisines;
-    private Integer durationTime;
+    private Integer duration;
     //TODO: OCENY UŻYTKOWNIKÓW
     private String[] images;
-    private RecipeDifficulty recipeDifficulty;
+    private RecipeDifficulty difficulty;
 
     public Recipe(String title,
                   List<String> ingredients,
                   List<String> steps,
                   String owner,
                   List<Allergens> allergens,
-                  RecipeDifficulty recipeDifficulty,
+                  RecipeDifficulty difficulty,
                   String[] images,
                   LocalDateTime creationDate,
                   List<RecipeCategory> categories,
                   List<RecipeCuisine> cuisines,
-                  Integer durationTime
+                  Integer duration
                   ) {
         this.title = title;
         this.ingredients = ingredients;
@@ -44,10 +44,10 @@ public class Recipe {
         this.owner = owner;
         this.allergens = allergens;
         this.images = images;
-        this.recipeDifficulty = recipeDifficulty;
+        this.difficulty = difficulty;
         this.creationDate = creationDate;
         this.categories = categories;
         this.cuisines = cuisines;
-        this.durationTime = durationTime;
+        this.duration = duration;
     }
 }

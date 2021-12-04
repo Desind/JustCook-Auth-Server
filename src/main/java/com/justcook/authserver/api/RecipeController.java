@@ -3,6 +3,8 @@ package com.justcook.authserver.api;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
+import com.justcook.authserver.model.Recipe.RecipeCategory;
+import com.justcook.authserver.model.Recipe.RecipeCuisine;
 import com.justcook.authserver.service.CookUserServiceImpl;
 import com.justcook.authserver.service.RecipeServiceImpl;
 import lombok.AllArgsConstructor;
@@ -68,5 +70,15 @@ public class RecipeController {
     public ResponseEntity<List<Recipe>> getRecipesWithIngredients(@RequestParam List<String> ingredients){
         log.info(String.valueOf(ingredients));
         return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<RecipeCategory>> getRecipeCategories(){
+        return ResponseEntity.status(200).body(recipeService.getRecipeCategories());
+    }
+
+    @GetMapping("/cuisines")
+    public ResponseEntity<List<RecipeCuisine>> getRecipeCuisines(){
+        return ResponseEntity.status(200).body(recipeService.getRecipeCuisines());
     }
 }

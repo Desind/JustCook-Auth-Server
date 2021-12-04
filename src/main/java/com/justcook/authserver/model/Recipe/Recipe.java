@@ -23,7 +23,6 @@ public class Recipe {
     private List<RecipeCategory> categories;
     private List<RecipeCuisine> cuisines;
     private Integer duration;
-    //TODO: OCENY UŻYTKOWNIKÓW
     private String[] images;
     private RecipeDifficulty difficulty;
 

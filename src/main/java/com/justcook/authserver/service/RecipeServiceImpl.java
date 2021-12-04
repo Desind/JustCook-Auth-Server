@@ -3,12 +3,15 @@ package com.justcook.authserver.service;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
+import com.justcook.authserver.model.Recipe.RecipeCategory;
+import com.justcook.authserver.model.Recipe.RecipeCuisine;
 import com.justcook.authserver.repository.RecipeRepository;
 import com.justcook.authserver.service.interfaces.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,4 +63,16 @@ public class RecipeServiceImpl implements RecipeService {
     public List<Recipe> getRecipesWithIngredients(List<String> ingredients) {
         return recipeRepository.findRecipesByIngredients(ingredients);
     }
+
+    @Override
+    public List<RecipeCategory> getRecipeCategories() {
+        return Arrays.asList(RecipeCategory.values());
+    }
+
+    @Override
+    public List<RecipeCuisine> getRecipeCuisines() {
+        return Arrays.asList(RecipeCuisine.values());
+    }
+
+
 }

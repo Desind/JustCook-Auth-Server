@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/api/recipe")
+@RequestMapping("/api")
 @AllArgsConstructor
 @Slf4j
 public class RecipeController {
@@ -25,13 +25,13 @@ public class RecipeController {
     private final CookUserServiceImpl cookUserService;
 
 
-    @GetMapping("/all/{page}")
+    @GetMapping("/recipes/{page}")
     public ResponseEntity<List<Recipe>> getAllRecipes(@PathVariable Integer page){
         List<Recipe> allRecipes = recipeService.getAllRecipes(page,20);
         return ResponseEntity.status(200).body(allRecipes);
     }
 
-    @PostMapping("/new")
+    @PostMapping("/recipe")
     public ResponseEntity<Object> createNewRecipe(HttpServletRequest request, @RequestBody Recipe recipe){
         //TODO: PRZYJMOWANIE DTO TYLKO Z POLAMI POTRZEBNYMI
         String email = String.valueOf(request.getAttribute("username"));
@@ -41,30 +41,30 @@ public class RecipeController {
         return ResponseEntity.status(201).build();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/recipe/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable String id){
         Optional<Recipe> recipe = Optional.ofNullable(recipeService.getRecipeById(id));
         return recipe.map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(404).build());
     }
 
-    @GetMapping("/owner/{id}")
+    @GetMapping("/owner-recipes/{id}")
     public ResponseEntity<List<Recipe>> getRecipesByOwner(@PathVariable String id){
         return ResponseEntity.status(200).body(recipeService.getRecipesByOwner(id));
     }
 
-    @GetMapping("/recipes/{page}")
+    @GetMapping("/recipes-without-allergens/{page}")
     public ResponseEntity<List<Recipe>> getRecipePagination(HttpServletRequest request, @PathVariable Integer page){
         String email = String.valueOf(request.getAttribute("username"));
-        List<Allergens> alergens = cookUserService.getCookUserByEmail(email).getAllergies();
-        return ResponseEntity.status(200).body(recipeService.getRecipesWithoutAlergens(alergens, page, 20));
+        List<Allergens> allergens = cookUserService.getCookUserByEmail(email).getAllergies();
+        return ResponseEntity.status(200).body(recipeService.getRecipesWithoutAlergens(allergens, page, 20));
     }
 
-    @PostMapping("/cuisineCategory")
+    @PostMapping("/recipes-with-cuisine-category")
     public ResponseEntity<List<Recipe>> getRecipesWithCuisineAndCategory(@RequestBody CategoryCuisineDto form){
         return ResponseEntity.status(200).body(recipeService.getRecipesWithCategoryAndCuisine(form));
     }
 
-    @GetMapping("/withIngredients")
+    @GetMapping("/recipes-with-ingredients")
     public ResponseEntity<List<Recipe>> getRecipesWithIngredients(@RequestParam List<String> ingredients){
         log.info(String.valueOf(ingredients));
         return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));

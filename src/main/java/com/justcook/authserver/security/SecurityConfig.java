@@ -60,12 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/withIngredients**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/all/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipes-with-ingredients**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipes/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/**").hasAnyAuthority(UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/recipes/**").hasAnyAuthority(UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/recipe/new").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product/new").hasAnyAuthority(UserRole.MODERATOR.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/recipe").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product").hasAnyAuthority(UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new AuthenticationFilter(authenticationManagerBean(),cookUserService));
         http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

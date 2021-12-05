@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 @AllArgsConstructor
 @Slf4j
 public class CookUserController {
@@ -26,7 +26,7 @@ public class CookUserController {
 
     //201 poprawne utworzenie użytkownika
     //403 email albo username zajęte
-    @PostMapping("/new")
+    @PostMapping("/user")
     public ResponseEntity<CookUser> saveNewCookUser(@RequestBody NewUserDto newUserDto){
         if (cookUserService.saveUser(newUserDto) != null){
             return ResponseEntity.status(201).build();
@@ -34,30 +34,30 @@ public class CookUserController {
         return ResponseEntity.status(403).build();
     }
 
-    @GetMapping("/all")
+    @GetMapping("/users")
     public ResponseEntity<List<CookUser>> getAllCookUsers(){
         List<CookUser> cookUsers = cookUserService.getCookUsers();
         return ResponseEntity.status(200).body(cookUsers);
     }
 
-    @PostMapping("/role/add")
+    @PostMapping("/user-role")
     public ResponseEntity<?> giveCookUserRole(@RequestBody RoleToUserDto form){
         log.info(form.toString());
         cookUserService.giveUserRole(form.getEmail(), form.getUserRole());
         return ResponseEntity.status(200).build();
     }
 
-    @GetMapping("/refreshtoken")
+    @GetMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         cookUserService.tokenRefresh(request, response);
     }
 
-    @PutMapping("/likerecipe/{id}")
+    @PutMapping("/like-recipe/{id}")
     public ResponseEntity<?> likeRecipe(HttpServletRequest request, @PathVariable String id){
         cookUserService.likeRecipe(String.valueOf(request.getAttribute("username")),id);
         return ResponseEntity.status(200).build();
     }
-    @DeleteMapping("/dislikerecipe/{id}")
+    @DeleteMapping("/dislike-recipe/{id}")
     public ResponseEntity<?> dislikeRecipe(HttpServletRequest request, @PathVariable String id){
         if(cookUserService.dislikeRecipe(String.valueOf(request.getAttribute("username")),id)){
             return ResponseEntity.status(HttpStatus.OK).build();

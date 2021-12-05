@@ -1,15 +1,19 @@
 package com.justcook.authserver.service;
 
+import com.justcook.authserver.dto.NewRecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.Recipe.RecipeCategory;
 import com.justcook.authserver.model.Recipe.RecipeCuisine;
+import com.justcook.authserver.model.Recipe.RecipeDifficulty;
 import com.justcook.authserver.repository.RecipeRepository;
 import com.justcook.authserver.service.interfaces.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.util.EnumUtils;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -26,8 +30,30 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe createNewRecipe(Recipe recipe) {
-        recipe.setCreationDate(LocalDateTime.now());
+    public Recipe createNewRecipe(NewRecipeDto newRecipeDto, String owner){
+        if(newRecipeDto.getTitle() == null || newRecipeDto.getIngredients() == null || newRecipeDto.getSteps() == null || owner == null){
+            return null;
+        }
+        RecipeDifficulty recipeDifficulty = RecipeDifficulty.AVERAGE;
+        if(newRecipeDto.getDifficulty() != null){
+            recipeDifficulty = newRecipeDto.getDifficulty();
+        }
+
+        Recipe recipe = new Recipe(
+                newRecipeDto.getTitle(),
+                newRecipeDto.getDescription(),
+                newRecipeDto.getIngredients(),
+                newRecipeDto.getSteps(),
+                owner,
+                newRecipeDto.getAllergens(),
+                recipeDifficulty,
+                newRecipeDto.getImages(),
+                LocalDateTime.now(),
+                newRecipeDto.getCategories(),
+                newRecipeDto.getCuisines(),
+                newRecipeDto.getDuration()
+
+        );
         return recipeRepository.insert(recipe);
     }
 

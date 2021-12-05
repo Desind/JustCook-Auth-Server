@@ -1,5 +1,6 @@
 package com.justcook.authserver.api;
 
+import com.justcook.authserver.dto.NewRecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
@@ -33,14 +34,17 @@ public class RecipeController {
         return ResponseEntity.status(200).body(allRecipes);
     }
 
+    //201 - Correct insert
+    //400 - Fields empty
     @PostMapping("/new")
-    public ResponseEntity<Object> createNewRecipe(HttpServletRequest request, @RequestBody Recipe recipe){
-        //TODO: PRZYJMOWANIE DTO TYLKO Z POLAMI POTRZEBNYMI
+    public ResponseEntity<Recipe> createNewRecipe(HttpServletRequest request, @RequestBody NewRecipeDto recipe){
         String email = String.valueOf(request.getAttribute("username"));
         String userId = cookUserService.getCookUserByEmail(email).getId();
-        recipe.setOwner(userId);
-        recipeService.createNewRecipe(recipe);
-        return ResponseEntity.status(201).build();
+        Recipe createdRecipe = recipeService.createNewRecipe(recipe, userId);
+        if(createdRecipe != null){
+            return ResponseEntity.status(201).body(createdRecipe);
+        }
+        return ResponseEntity.status(400).build();
     }
 
     @GetMapping("/{id}")

@@ -23,7 +23,7 @@ public class Recipe {
     private List<RecipeCategory> categories;
     private List<RecipeCuisine> cuisines;
     private Integer duration;
-    private String[] images;
+    private List<String> images;
     private RecipeDifficulty difficulty;
 
     public Recipe(String title,
@@ -33,7 +33,7 @@ public class Recipe {
                   String owner,
                   List<Allergens> allergens,
                   RecipeDifficulty difficulty,
-                  String[] images,
+                  List<String> images,
                   LocalDateTime creationDate,
                   List<RecipeCategory> categories,
                   List<RecipeCuisine> cuisines,

@@ -10,19 +10,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/api/product")
+@RequestMapping("/api")
 @AllArgsConstructor
 @Slf4j
 public class ProductController {
 
     public final ProductService productService;
 
-    @GetMapping("/{ean}")
+    @GetMapping("/product/{ean}")
     public ResponseEntity<Product> getProductByEan(@PathVariable String ean){
         return ResponseEntity.status(200).body(productService.findProductByEan(ean));
     }
 
-    @PostMapping("/new")
+    @PostMapping("/product")
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
         return ResponseEntity.status(201).body(productService.addProduct(product));
     }

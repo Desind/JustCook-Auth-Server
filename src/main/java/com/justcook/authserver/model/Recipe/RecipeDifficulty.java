@@ -4,6 +4,7 @@ public enum RecipeDifficulty {
     BEGGINER,
     EASY,
     AVERAGE,
+    MEDIUM,
     ADVANCED,
     HARD
 }

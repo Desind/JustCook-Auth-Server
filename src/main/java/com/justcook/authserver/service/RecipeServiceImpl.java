@@ -97,5 +97,9 @@ public class RecipeServiceImpl implements RecipeService {
         return Arrays.asList(RecipeCuisine.values());
     }
 
-
+    @Override
+    public List<Allergens> getAllergens() {
+        return Arrays.asList(Allergens.values());
+    }
+    
 }

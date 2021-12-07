@@ -76,13 +76,18 @@ public class RecipeController {
         return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/recipe/categories")
     public ResponseEntity<List<RecipeCategory>> getRecipeCategories(){
         return ResponseEntity.status(200).body(recipeService.getRecipeCategories());
     }
 
-    @GetMapping("/cuisines")
+    @GetMapping("/recipe/cuisines")
     public ResponseEntity<List<RecipeCuisine>> getRecipeCuisines(){
         return ResponseEntity.status(200).body(recipeService.getRecipeCuisines());
+    }
+
+    @GetMapping("/allergens")
+    public ResponseEntity<List<Allergens>> getAllergens(){
+        return ResponseEntity.status(200).body(recipeService.getAllergens());
     }
 }

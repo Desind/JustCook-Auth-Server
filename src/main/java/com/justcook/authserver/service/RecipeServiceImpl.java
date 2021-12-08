@@ -23,7 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
 
     public List<Recipe> getAllRecipes(int page, int records) {
-        return recipeRepository.findAll().stream().skip((page-1)*records).limit(records).collect(Collectors.toList());
+        return recipeRepository.findAllByOrderByCreationDateDesc().stream().skip((page-1)*records).limit(records).collect(Collectors.toList());
     }
 
     @Override
@@ -101,5 +101,5 @@ public class RecipeServiceImpl implements RecipeService {
     public List<Allergens> getAllergens() {
         return Arrays.asList(Allergens.values());
     }
-    
+
 }

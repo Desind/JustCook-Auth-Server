@@ -19,4 +19,5 @@ public interface CookUserService {
     void tokenRefresh(HttpServletRequest request, HttpServletResponse response) throws IOException;
     void likeRecipe(String email, String id);
     boolean dislikeRecipe(String email, String id);
+    String getUsernameFromId(String id);
 }

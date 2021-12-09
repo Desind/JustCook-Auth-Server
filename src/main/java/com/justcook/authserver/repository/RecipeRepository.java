@@ -13,6 +13,7 @@ public interface RecipeRepository extends MongoRepository<Recipe, String> {
     List<Recipe> findRecipesByOwner(String id);
     Recipe findRecipeById(String id);
     List<Recipe> findAll();
+    List<Recipe> findAllByOrderByCreationDateDesc();
     List<Recipe> findRecipesByAllergensNotContains(List<Allergens> alergens);
     List<Recipe> findRecipesByCategoriesContainsOrCuisinesContains(List<RecipeCategory> categories, List<RecipeCuisine> cuisines);
     List<Recipe> findRecipesByCuisinesContains(List<RecipeCuisine> cuisines);

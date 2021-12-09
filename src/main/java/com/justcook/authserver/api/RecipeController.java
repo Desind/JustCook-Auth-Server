@@ -18,24 +18,34 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.annotations.*;
+
 @Controller
 @RequestMapping("/api")
 @AllArgsConstructor
 @Slf4j
+@Api(value = "Recipe controller", tags = {"Recipes"})
 public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
     private final CookUserServiceImpl cookUserService;
 
-
+    //200 - Correct output
+    //400 - Invalid input
+    //FETCH ALL RECIPES ORDERED BY DATE AND PAGINATED
     @GetMapping("/recipes/{page}")
     public ResponseEntity<List<Recipe>> getAllRecipes(@PathVariable Integer page){
+
+        if (page < 1) {
+            return ResponseEntity.status(400).build();
+        }
         List<Recipe> allRecipes = recipeService.getAllRecipes(page,20);
         return ResponseEntity.status(200).body(allRecipes);
     }
 
     //201 - Correct insert
     //400 - Fields empty
+    //ADD NEW RECIPE DO DATABASE
     @PostMapping("/recipe")
     public ResponseEntity<Recipe> createNewRecipe(HttpServletRequest request, @RequestBody NewRecipeDto recipe){
         String email = String.valueOf(request.getAttribute("username"));
@@ -76,13 +86,18 @@ public class RecipeController {
         return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/recipe/categories")
     public ResponseEntity<List<RecipeCategory>> getRecipeCategories(){
         return ResponseEntity.status(200).body(recipeService.getRecipeCategories());
     }
 
-    @GetMapping("/cuisines")
+    @GetMapping("/recipe/cuisines")
     public ResponseEntity<List<RecipeCuisine>> getRecipeCuisines(){
         return ResponseEntity.status(200).body(recipeService.getRecipeCuisines());
+    }
+
+    @GetMapping("/allergens")
+    public ResponseEntity<List<Allergens>> getAllergens(){
+        return ResponseEntity.status(200).body(recipeService.getAllergens());
     }
 }

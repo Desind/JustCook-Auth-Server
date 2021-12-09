@@ -42,10 +42,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         CookUser cookUser = cookUserRepository.findByEmail(email);
         if(cookUser == null) {
-            log.error("User not found");
             throw new UsernameNotFoundException("User not found");
-        } else {
-            log.info("User found: " + cookUser.getUsername());
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (UserRole role : cookUser.getUserRoles()) {
@@ -167,5 +164,11 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
         }else{
             return false;
         }
+    }
+
+    @Override
+    public String getUsernameFromId(String id) {
+        Optional<CookUser> cookUser = cookUserRepository.findById(id);
+        return cookUser.map(CookUser::getUsername).orElse(null);
     }
 }

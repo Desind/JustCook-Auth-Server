@@ -66,4 +66,18 @@ public class CookUserController {
     }
 
     //TODO: ODCZYTYWANIE DANYCH UŻYTKOWNIKA
+
+    @GetMapping("/username/{id}")
+    public ResponseEntity<Map<String,String>> getUsername(@PathVariable String id){
+        cookUserService.getUsernameFromId(id);
+        Map<String, String> username  = new HashMap<>();
+        username.put("username",cookUserService.getUsernameFromId(id));
+        System.out.println(id);
+        System.out.println(username);
+        if(username.get("username") != null){
+            return ResponseEntity.status(200).body(username);
+        }else{
+            return ResponseEntity.status(404).build();
+        }
+    }
 }

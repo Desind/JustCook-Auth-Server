@@ -7,6 +7,8 @@ import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.Recipe.RecipeCategory;
 import com.justcook.authserver.model.Recipe.RecipeCuisine;
 import com.justcook.authserver.model.Recipe.RecipeDifficulty;
+import com.justcook.authserver.model.User.CookUser;
+import com.justcook.authserver.repository.CookUserRepository;
 import com.justcook.authserver.repository.RecipeRepository;
 import com.justcook.authserver.service.interfaces.RecipeService;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final CookUserRepository cookUserRepository;
 
     public List<Recipe> getAllRecipes(int page, int records) {
         return recipeRepository.findAllByOrderByCreationDateDesc().stream().skip((page-1)*records).limit(records).collect(Collectors.toList());

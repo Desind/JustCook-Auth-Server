@@ -18,10 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.annotations.*;
+
 @Controller
 @RequestMapping("/api")
 @AllArgsConstructor
 @Slf4j
+@Api(value = "Recipe controller", tags = {"Recipes"})
 public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
@@ -32,6 +35,7 @@ public class RecipeController {
     //FETCH ALL RECIPES ORDERED BY DATE AND PAGINATED
     @GetMapping("/recipes/{page}")
     public ResponseEntity<List<Recipe>> getAllRecipes(@PathVariable Integer page){
+
         if (page < 1) {
             return ResponseEntity.status(400).build();
         }

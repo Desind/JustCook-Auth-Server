@@ -171,4 +171,10 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
         Optional<CookUser> cookUser = cookUserRepository.findById(id);
         return cookUser.map(CookUser::getUsername).orElse(null);
     }
+
+    @Override
+    public List<String> getUserFavouriteRecipes(String id) {
+        Optional<CookUser> cookUser = cookUserRepository.findById(id);
+        return cookUser.map(CookUser::getFavouriteRecipes).orElse(null);
+    }
 }

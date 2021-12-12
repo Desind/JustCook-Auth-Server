@@ -60,7 +60,7 @@ public class RecipeController {
     @GetMapping("/recipe/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable String id){
         Optional<Recipe> recipe = Optional.ofNullable(recipeService.getRecipeById(id));
-        return recipe.map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(404).build());
+        return recipe.map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(204).build());
     }
 
     @GetMapping("/owner-recipes/{id}")

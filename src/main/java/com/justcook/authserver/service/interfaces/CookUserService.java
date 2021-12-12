@@ -20,4 +20,5 @@ public interface CookUserService {
     void likeRecipe(String email, String id);
     boolean dislikeRecipe(String email, String id);
     String getUsernameFromId(String id);
+    List<String> getUserFavouriteRecipes(String id);
 }

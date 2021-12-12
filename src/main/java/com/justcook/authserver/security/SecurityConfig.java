@@ -63,11 +63,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipes/{page}").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/username/{id}").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/all/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/{id}").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/cuisines").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/allergens").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/categories").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipes-with-ingredients**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/**").hasAnyAuthority(UserRole.USER.name());
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/**").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/favourite-recipes/{id}").hasAnyAuthority(UserRole.USER.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/recipe").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product").hasAnyAuthority(UserRole.MODERATOR.name(), UserRole.ADMIN.name());

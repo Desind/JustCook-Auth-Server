@@ -69,15 +69,23 @@ public class CookUserController {
 
     @GetMapping("/username/{id}")
     public ResponseEntity<Map<String,String>> getUsername(@PathVariable String id){
-        cookUserService.getUsernameFromId(id);
         Map<String, String> username  = new HashMap<>();
         username.put("username",cookUserService.getUsernameFromId(id));
-        System.out.println(id);
-        System.out.println(username);
         if(username.get("username") != null){
             return ResponseEntity.status(200).body(username);
         }else{
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(204).build();
+        }
+    }
+
+    @GetMapping("/favourite-recipes/{id}")
+    public ResponseEntity<Map<String,List<String>>> getFavouriteRecipes(@PathVariable String id){
+        Map<String, List<String>> favouriteRecipes  = new HashMap<>();
+        favouriteRecipes.put("favouriteRecipes",cookUserService.getUserFavouriteRecipes(id));
+        if(favouriteRecipes.get("favouriteRecipes") != null) {
+            return ResponseEntity.status(200).body(favouriteRecipes);
+        }else{
+            return ResponseEntity.status(204).build();
         }
     }
 }

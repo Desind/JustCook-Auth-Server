@@ -1,6 +1,7 @@
 package com.justcook.authserver.service.interfaces;
 
 import com.justcook.authserver.dto.NewRecipeDto;
+import com.justcook.authserver.dto.RecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
@@ -20,4 +21,5 @@ public interface RecipeService {
     List<RecipeCategory> getRecipeCategories();
     List<RecipeCuisine> getRecipeCuisines();
     List<Allergens> getAllergens();
+    List<RecipeDto> getAdminRecipes(String title, String owner);
 }

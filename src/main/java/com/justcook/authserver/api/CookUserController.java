@@ -40,13 +40,6 @@ public class CookUserController {
         return ResponseEntity.status(200).body(cookUsers);
     }
 
-    @PostMapping("/user-role")
-    public ResponseEntity<?> giveCookUserRole(@RequestBody RoleToUserDto form){
-        log.info(form.toString());
-        cookUserService.giveUserRole(form.getEmail(), form.getUserRole());
-        return ResponseEntity.status(200).build();
-    }
-
     @GetMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         cookUserService.tokenRefresh(request, response);
@@ -62,7 +55,7 @@ public class CookUserController {
         if(cookUserService.dislikeRecipe(String.valueOf(request.getAttribute("username")),id)){
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-        return ResponseEntity.status(404).build();
+        return ResponseEntity.status(204).build();
     }
 
     //TODO: ODCZYTYWANIE DANYCH UŻYTKOWNIKA
@@ -81,11 +74,12 @@ public class CookUserController {
     @GetMapping("/favourite-recipes/{id}")
     public ResponseEntity<Map<String,List<String>>> getFavouriteRecipes(@PathVariable String id){
         Map<String, List<String>> favouriteRecipes  = new HashMap<>();
-        favouriteRecipes.put("favouriteRecipes",cookUserService.getUserFavouriteRecipes(id));
-        if(favouriteRecipes.get("favouriteRecipes") != null) {
-            return ResponseEntity.status(200).body(favouriteRecipes);
+        List<String> recipesId = cookUserService.getUserFavouriteRecipes(id);
+        if(!(recipesId == null)){
+            favouriteRecipes.put("favouriteRecipes",recipesId);
         }else{
-            return ResponseEntity.status(204).build();
+            favouriteRecipes.put("favouriteRecipes",List.of());
         }
+        return ResponseEntity.status(200).body(favouriteRecipes);
     }
 }

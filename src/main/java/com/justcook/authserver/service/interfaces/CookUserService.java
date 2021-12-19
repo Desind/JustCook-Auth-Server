@@ -1,7 +1,10 @@
 package com.justcook.authserver.service.interfaces;
 
+import com.justcook.authserver.dto.CookUserDto;
 import com.justcook.authserver.dto.NewUserDto;
 import com.justcook.authserver.model.User.CookUser;
+import com.justcook.authserver.model.User.UserRole;
+import org.apache.catalina.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +14,7 @@ import java.util.Optional;
 
 public interface CookUserService {
     CookUser saveUser(NewUserDto cookUser);
-    void giveUserRole(String email, String userRole);
+    void giveUserRole(String email, UserRole userRole);
     Optional<CookUser> getCookUserById(String id);
     CookUser getCookUserByEmail(String email);
     CookUser getCookUserByUsername(String username);
@@ -21,4 +24,6 @@ public interface CookUserService {
     boolean dislikeRecipe(String email, String id);
     String getUsernameFromId(String id);
     List<String> getUserFavouriteRecipes(String id);
+    List<CookUserDto> findByUsernameContainsAndRole(String username, List<UserRole> role);
+    void deleteUser(String id);
 }

@@ -1,5 +1,6 @@
 package com.justcook.authserver.repository;
 
+import com.justcook.authserver.dto.RecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.Recipe.RecipeCategory;
@@ -20,5 +21,6 @@ public interface RecipeRepository extends MongoRepository<Recipe, String> {
     List<Recipe> findRecipesByCategoriesContains(List<RecipeCategory> categories);
     @Query("{ 'ingredients': {$all: ?0}}")
     List<Recipe> findRecipesByIngredients(List<String> ingredients);
-
+    Integer countRecipesByOwner(String id);
+    List<RecipeDto> findRecipesByTitleContainsAndOwnerIsLike(String title, String owner);
 }

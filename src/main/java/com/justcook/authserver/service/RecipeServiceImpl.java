@@ -1,6 +1,7 @@
 package com.justcook.authserver.service;
 
 import com.justcook.authserver.dto.NewRecipeDto;
+import com.justcook.authserver.dto.RecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
@@ -106,4 +107,14 @@ public class RecipeServiceImpl implements RecipeService {
         return Arrays.asList(Allergens.values());
     }
 
+    @Override
+    public List<RecipeDto> getAdminRecipes(String title, String owner) {
+        CookUser user = cookUserRepository.findByUsername(owner);
+        List<RecipeDto> recipes = recipeRepository.findRecipesByTitleContainsAndOwnerIsLike(title,user.getId());
+        for(RecipeDto recipe : recipes){
+            Optional<CookUser> u = cookUserRepository.findById(recipe.getOwner());
+            u.ifPresent(cookUser -> recipe.setOwnerUsername(cookUser.getUsername()));
+        }
+        return recipes;
+    }
 }

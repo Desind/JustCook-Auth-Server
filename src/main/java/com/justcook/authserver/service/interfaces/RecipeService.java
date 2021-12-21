@@ -22,4 +22,5 @@ public interface RecipeService {
     List<RecipeCuisine> getRecipeCuisines();
     List<Allergens> getAllergens();
     List<RecipeDto> getAdminRecipes(String title, String owner);
+    void deleteRecipe(String id);
 }

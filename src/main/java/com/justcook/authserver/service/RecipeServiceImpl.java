@@ -1,6 +1,7 @@
 package com.justcook.authserver.service;
 
 import com.justcook.authserver.dto.NewRecipeDto;
+import com.justcook.authserver.dto.PaginatedRecipeDto;
 import com.justcook.authserver.dto.RecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -109,12 +111,44 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<RecipeDto> getAdminRecipes(String title, String owner) {
-        CookUser user = cookUserRepository.findByUsername(owner);
-        List<RecipeDto> recipes = recipeRepository.findRecipesByTitleContainsAndOwnerIsLike(title,user.getId());
+        Optional<CookUser> user = Optional.ofNullable(cookUserRepository.findByEmail(owner));
+        List<RecipeDto> recipes;
+        if(user.isPresent()){
+            recipes = recipeRepository.findRecipesByTitleContainsAndOwnerIsLike(title,user.get().getId());
+        }else{
+            recipes = recipeRepository.findRecipesByTitleContainsAndOwnerIsLike(title,"");
+        }
         for(RecipeDto recipe : recipes){
             Optional<CookUser> u = cookUserRepository.findById(recipe.getOwner());
             u.ifPresent(cookUser -> recipe.setOwnerUsername(cookUser.getUsername()));
         }
         return recipes;
+    }
+
+    @Override
+    public void deleteRecipe(String id) {
+        recipeRepository.deleteById(id);
+    }
+
+    public PaginatedRecipeDto recipeSearch(String title, List<Allergens> allergens, List<RecipeCategory> categories, List<RecipeCuisine> cuisines, Integer page, Integer pageSize){
+        if(categories.isEmpty()){
+            categories = Arrays.asList(RecipeCategory.values());
+        }
+        if(cuisines.isEmpty()){
+            cuisines = Arrays.asList(RecipeCuisine.values());
+        }
+        List<Recipe> recipeList = recipeRepository.queryRecipes(title,allergens,categories,cuisines);
+        recipeList.sort(Comparator.comparing(Recipe::getCreationDate).reversed());
+        Integer pagesCount = (int) Math.ceil(recipeList.size()/(double)pageSize);
+        if(page>pagesCount){
+            page = pagesCount;
+        }if(page<1){
+            pagesCount=1;
+        }
+        return new PaginatedRecipeDto(
+                page,
+                pageSize,
+                pagesCount,
+                recipeList.stream().skip((page-1)*pageSize).limit(pageSize).toList());
     }
 }

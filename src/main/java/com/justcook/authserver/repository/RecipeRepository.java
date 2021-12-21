@@ -23,4 +23,6 @@ public interface RecipeRepository extends MongoRepository<Recipe, String> {
     List<Recipe> findRecipesByIngredients(List<String> ingredients);
     Integer countRecipesByOwner(String id);
     List<RecipeDto> findRecipesByTitleContainsAndOwnerIsLike(String title, String owner);
+    @Query("{$and:[{title:{'$regex' : ?0, '$options' : 'i'}},{'allergens': {$nin: ?1}},{'categories': {$in: ?2}},{'cuisines': {$in: ?3}}]}")
+    List<Recipe> queryRecipes(String title, List<Allergens> allergens, List<RecipeCategory> categories, List<RecipeCuisine> cuisines);
 }

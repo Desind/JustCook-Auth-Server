@@ -16,7 +16,6 @@ import com.justcook.authserver.service.interfaces.CookUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -90,7 +89,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
     }
 
     @Override
-    public CookUser getCookUserByUsername(String username) {
+    public Optional<CookUser> getCookUserByUsername(String username) {
         return cookUserRepository.findByUsername(username);
     }
 

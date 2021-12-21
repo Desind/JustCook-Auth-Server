@@ -26,5 +26,6 @@ public enum RecipeCuisine {
     CARIBBEAN,
     MEDITERRANEAN,
     JAPANESE,
-    POLISH
+    POLISH,
+    OTHER
 }

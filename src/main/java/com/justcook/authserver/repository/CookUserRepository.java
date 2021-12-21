@@ -6,9 +6,10 @@ import com.justcook.authserver.model.User.UserRole;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CookUserRepository extends MongoRepository<CookUser, String> {
-    CookUser findByUsername(String username);
+    Optional<CookUser> findByUsername(String username);
     List<CookUserDto> findByUsernameContainsAndUserRolesContaining(String username, List<UserRole> userRoles);
     CookUser findByEmail(String email);
     void deleteById(String id);

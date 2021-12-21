@@ -1,6 +1,7 @@
 package com.justcook.authserver.api;
 
 import com.justcook.authserver.dto.NewRecipeDto;
+import com.justcook.authserver.dto.PaginatedRecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
@@ -99,5 +100,16 @@ public class RecipeController {
     @GetMapping("/allergens")
     public ResponseEntity<List<Allergens>> getAllergens(){
         return ResponseEntity.status(200).body(recipeService.getAllergens());
+    }
+
+    @GetMapping("/recipe/query")
+    public ResponseEntity<PaginatedRecipeDto> searchRecipes(@RequestParam String title,
+                                                            @RequestParam List<Allergens> allergens,
+                                                            @RequestParam List<RecipeCategory> categories,
+                                                            @RequestParam List<RecipeCuisine> cuisines,
+                                                            @RequestParam(defaultValue = "1") Integer page,
+                                                            @RequestParam(defaultValue = "10") Integer pageSize) {
+        PaginatedRecipeDto queryRecipes = recipeService.recipeSearch(title,allergens,categories,cuisines,page,pageSize);
+        return ResponseEntity.status(200).body(queryRecipes);
     }
 }

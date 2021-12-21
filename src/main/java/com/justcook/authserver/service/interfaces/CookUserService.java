@@ -4,7 +4,6 @@ import com.justcook.authserver.dto.CookUserDto;
 import com.justcook.authserver.dto.NewUserDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.model.User.UserRole;
-import org.apache.catalina.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,7 @@ public interface CookUserService {
     void giveUserRole(String email, UserRole userRole);
     Optional<CookUser> getCookUserById(String id);
     CookUser getCookUserByEmail(String email);
-    CookUser getCookUserByUsername(String username);
+    Optional<CookUser> getCookUserByUsername(String username);
     List<CookUser> getCookUsers();
     void tokenRefresh(HttpServletRequest request, HttpServletResponse response) throws IOException;
     void likeRecipe(String email, String id);

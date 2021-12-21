@@ -42,8 +42,14 @@ public class AdminController{
     }
 
     @GetMapping("/recipes")
-    public ResponseEntity<List<RecipeDto>> getAllRecipes(@RequestParam String name, @RequestParam String username){
-        List<RecipeDto> recipes = recipeService.getAdminRecipes(name, username);
+    public ResponseEntity<List<RecipeDto>> getAllRecipes(@RequestParam String name, @RequestParam String email){
+        List<RecipeDto> recipes = recipeService.getAdminRecipes(name, email);
         return ResponseEntity.status(200).body(recipes);
+    }
+
+    @DeleteMapping("/recipe/{id}")
+    public ResponseEntity<?> deleteRecipe(@PathVariable String id){
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.status(200).build();
     }
 }

@@ -7,6 +7,8 @@ import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.Recipe.RecipeCategory;
 import com.justcook.authserver.model.Recipe.RecipeCuisine;
+import com.justcook.authserver.model.User.CookUser;
+import com.justcook.authserver.model.User.UserRole;
 import com.justcook.authserver.service.CookUserServiceImpl;
 import com.justcook.authserver.service.RecipeServiceImpl;
 import lombok.AllArgsConstructor;
@@ -111,5 +113,31 @@ public class RecipeController {
                                                             @RequestParam(defaultValue = "10") Integer pageSize) {
         PaginatedRecipeDto queryRecipes = recipeService.recipeSearch(title,allergens,categories,cuisines,page,pageSize);
         return ResponseEntity.status(200).body(queryRecipes);
+    }
+
+    @PutMapping("/recipe")
+    public ResponseEntity<?> editRecipe(HttpServletRequest request, @RequestBody Recipe recipe){
+        String email = String.valueOf(request.getAttribute("username"));
+        Recipe updatedRecipe = recipeService.editRecipe(email, recipe);
+        if(updatedRecipe == null){
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(updatedRecipe);
+    }
+    @DeleteMapping("/recipe/{id}")
+    public ResponseEntity<?> deleteRecipe(HttpServletRequest request, @PathVariable String id){
+        String user_id = String.valueOf(request.getAttribute("username"));
+        CookUser cookUser = cookUserService.getCookUserByEmail(user_id);
+        Recipe recipe = recipeService.getRecipeById(id);
+        if(cookUser != null){
+            if(cookUser.getUserRoles().contains(UserRole.ADMIN) || (cookUser.getId().equals(recipe.getOwner()))){
+                recipeService.deleteRecipe(id);
+                return ResponseEntity.status(200).build();
+            }else{
+                return ResponseEntity.status(402).build();
+            }
+        }
+        log.info("not present");
+        return ResponseEntity.status(403).build();
     }
 }

@@ -151,4 +151,12 @@ public class RecipeServiceImpl implements RecipeService {
                 pagesCount,
                 recipeList.stream().skip((page-1)*pageSize).limit(pageSize).toList());
     }
+
+    public Recipe editRecipe(String email, Recipe recipe){
+        String userId = cookUserRepository.findByEmail(email).getId();
+        if(userId.equals(recipe.getOwner()) && recipeRepository.existsById(recipe.getId())){
+            return recipeRepository.save(recipe);
+        }
+        return null;
+    }
 }

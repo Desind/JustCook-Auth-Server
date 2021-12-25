@@ -1,7 +1,6 @@
 package com.justcook.authserver.repository;
 
 import com.justcook.authserver.dto.RecipeDto;
-import com.justcook.authserver.dto.RecipeIngredientsDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.Recipe.RecipeCategory;

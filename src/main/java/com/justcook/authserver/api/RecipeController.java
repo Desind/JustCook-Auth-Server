@@ -84,9 +84,11 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes-with-ingredients")
-    public ResponseEntity<List<Recipe>> getRecipesWithIngredients(@RequestParam List<String> ingredients){
+    public ResponseEntity<PaginatedRecipeDto> getRecipesWithIngredients(@RequestParam List<String> ingredients,
+                                                                        @RequestParam(defaultValue = "1") Integer page,
+                                                                        @RequestParam(defaultValue = "10") Integer pageSize){
         log.info(String.valueOf(ingredients));
-        return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));
+        return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients, page, pageSize));
     }
 
     @GetMapping("/recipe/categories")

@@ -87,7 +87,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getRecipesWithIngredients(List<String> ingredients) {
+    public PaginatedRecipeDto getRecipesWithIngredients(List<String> ingredients, Integer page, Integer pageSize) {
         //TODO: CHANGE THIS ABOMINATION
         String newRegex = "^";
         for (String ingredient : ingredients) {
@@ -102,7 +102,17 @@ public class RecipeServiceImpl implements RecipeService {
                 recipesWithIngredients.add(recipe);
             }
         }
-        return recipesWithIngredients;
+        Integer pagesCount = (int) Math.ceil(recipesWithIngredients.size()/(double)pageSize);
+        if(page>pagesCount){
+            page = pagesCount;
+        }
+        if(page<1){
+            pagesCount=1;
+            page=1;
+        }
+        recipesWithIngredients.sort(Comparator.comparing(Recipe::getCreationDate).reversed());
+        PaginatedRecipeDto paginatedRecipeDto =  new PaginatedRecipeDto(page,pageSize,pagesCount,recipesWithIngredients.stream().skip((page-1)*pageSize).limit(pageSize).toList());
+        return paginatedRecipeDto;
     }
 
     @Override
@@ -155,6 +165,7 @@ public class RecipeServiceImpl implements RecipeService {
             page = pagesCount;
         }if(page<1){
             pagesCount=1;
+            page=1;
         }
         return new PaginatedRecipeDto(
                 page,

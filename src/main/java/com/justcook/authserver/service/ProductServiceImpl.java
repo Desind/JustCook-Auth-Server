@@ -8,9 +8,11 @@ import com.justcook.authserver.service.interfaces.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -19,8 +21,9 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public Product findProductByEan(String ean) {
-        return productRepository.findByEan(ean);
+    public Optional<Product> findProductByEan(String ean) {
+        Product product = productRepository.findByEan(ean);
+        return Optional.ofNullable(product);
     }
 
     @Override

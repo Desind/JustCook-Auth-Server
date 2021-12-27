@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api")
@@ -22,7 +23,8 @@ public class ProductController {
 
     @GetMapping("/product/{ean}")
     public ResponseEntity<Product> getProductByEan(@PathVariable String ean){
-        return ResponseEntity.status(200).body(productService.findProductByEan(ean));
+        Optional<Product> product = productService.findProductByEan(ean);
+        return product.map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(204).build());
     }
 
     @PostMapping("/product")

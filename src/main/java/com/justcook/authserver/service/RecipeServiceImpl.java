@@ -39,6 +39,13 @@ public class RecipeServiceImpl implements RecipeService {
         if(newRecipeDto.getDifficulty() != null){
             recipeDifficulty = newRecipeDto.getDifficulty();
         }
+        System.out.println(newRecipeDto.toString());
+        if(newRecipeDto.getCategories().isEmpty()){
+            newRecipeDto.setCategories(List.of(RecipeCategory.OTHER));
+        }
+        if(newRecipeDto.getCuisines().isEmpty()){
+            newRecipeDto.setCuisines(List.of(RecipeCuisine.OTHER));
+        }
 
         Recipe recipe = new Recipe(
                 newRecipeDto.getTitle(),

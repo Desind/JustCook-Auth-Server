@@ -62,6 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/admin/**").hasAnyAuthority(UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipes/{page}").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/{ean}").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/username/{id}").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/all/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/{id}").permitAll();

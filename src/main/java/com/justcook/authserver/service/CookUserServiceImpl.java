@@ -7,6 +7,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justcook.authserver.dto.CookUserDto;
 import com.justcook.authserver.dto.NewUserDto;
+import com.justcook.authserver.dto.UserImageDto;
+import com.justcook.authserver.dto.UserProfileDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.model.User.UserStatus;
 import com.justcook.authserver.model.User.UserRole;
@@ -191,6 +193,30 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
     @Override
     public void deleteUser(String id) {
         cookUserRepository.deleteById(id);
+    }
+
+    @Override
+    public UserProfileDto getUserProfile(String id){
+        Optional<CookUser> cookUser = Optional.ofNullable(cookUserRepository.findByEmail(id));
+        UserProfileDto userProfileDto = null;
+        if(cookUser.isPresent()){
+            userProfileDto = new UserProfileDto(
+                    cookUser.get().getUsername(),
+                    cookUser.get().getEmail(),
+                    cookUser.get().getRegistrationDate(),
+                    cookUser.get().getUserRoles(),
+                    cookUser.get().getImage(),
+                    cookUser.get().getFavouriteRecipes(),
+                    cookUser.get().getAllergies());
+        }
+        return userProfileDto;
+    }
+
+    @Override
+    public CookUser setUserImage(String email, UserImageDto userImage){
+        CookUser cookUser = cookUserRepository.findByEmail(email);
+        cookUser.setImage(userImage.getImage());
+        return cookUserRepository.save(cookUser);
     }
 
 }

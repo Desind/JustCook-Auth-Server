@@ -2,6 +2,8 @@ package com.justcook.authserver.service.interfaces;
 
 import com.justcook.authserver.dto.CookUserDto;
 import com.justcook.authserver.dto.NewUserDto;
+import com.justcook.authserver.dto.UserImageDto;
+import com.justcook.authserver.dto.UserProfileDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.model.User.UserRole;
 
@@ -25,4 +27,6 @@ public interface CookUserService {
     List<String> getUserFavouriteRecipes(String id);
     List<CookUserDto> findByUsernameContainsAndRole(String username, List<UserRole> role);
     void deleteUser(String id);
+    UserProfileDto getUserProfile(String id);
+    CookUser setUserImage(String email, UserImageDto userImage);
 }

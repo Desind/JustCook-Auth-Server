@@ -1,6 +1,7 @@
 package com.justcook.authserver.repository;
 
 import com.justcook.authserver.dto.CookUserDto;
+import com.justcook.authserver.dto.UserProfileDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.model.User.UserRole;
 import org.springframework.data.mongodb.repository.MongoRepository;

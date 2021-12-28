@@ -1,6 +1,8 @@
 package com.justcook.authserver.api;
 
 import com.justcook.authserver.dto.NewUserDto;
+import com.justcook.authserver.dto.UserImageDto;
+import com.justcook.authserver.dto.UserProfileDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.dto.RoleToUserDto;
 import com.justcook.authserver.service.interfaces.CookUserService;
@@ -58,7 +60,19 @@ public class CookUserController {
         return ResponseEntity.status(204).build();
     }
 
-    //TODO: ODCZYTYWANIE DANYCH UŻYTKOWNIKA
+    @GetMapping("/profile")
+    public ResponseEntity<?> userProfile(HttpServletRequest request){
+        String email = (String) request.getAttribute("username");
+        UserProfileDto userProfileDto = cookUserService.getUserProfile(email);
+        return ResponseEntity.status(200).body(userProfileDto);
+    }
+
+    @PutMapping("/user-image")
+    public ResponseEntity<?> uploadUserImage(HttpServletRequest request, @RequestBody Map<String, String> userImage){
+        String email = (String) request.getAttribute("username");
+        CookUser cookUser = cookUserService.setUserImage(email,new UserImageDto(userImage.get("image")));
+        return ResponseEntity.status(200).build();
+    }
 
     @GetMapping("/username/{id}")
     public ResponseEntity<Map<String,String>> getUsername(@PathVariable String id){

@@ -142,4 +142,13 @@ public class RecipeController {
         log.info("not present");
         return ResponseEntity.status(403).build();
     }
+
+    @GetMapping("/recommend-recipes")
+    public ResponseEntity<PaginatedRecipeDto> recommendRecipes(HttpServletRequest request,
+                                                               @RequestParam(defaultValue = "1") Integer page,
+                                                               @RequestParam(defaultValue = "10") Integer pageSize) {
+        String email = String.valueOf(request.getAttribute("username"));
+        return ResponseEntity.status(200).body(recipeService.recommendRecipes(email,page,pageSize));
+    }
+
 }

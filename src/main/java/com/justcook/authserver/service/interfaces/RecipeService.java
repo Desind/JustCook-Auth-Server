@@ -23,5 +23,6 @@ public interface RecipeService {
     List<RecipeCuisine> getRecipeCuisines();
     List<Allergens> getAllergens();
     List<RecipeDto> getAdminRecipes(String title, String owner);
+    PaginatedRecipeDto recommendRecipes(String email, Integer page, Integer pagesize);
     void deleteRecipe(String id);
 }

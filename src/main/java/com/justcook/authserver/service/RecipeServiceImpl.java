@@ -154,6 +154,103 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public PaginatedRecipeDto recommendRecipes(String email, Integer page, Integer pageSize) {
+        CookUser cookUser = cookUserRepository.findByEmail(email);
+        List<String> favouriteIds = cookUser.getFavouriteRecipes();
+
+        List<Recipe> recommendedRecipes = new ArrayList<>(Collections.emptyList());
+
+        try{
+            if(favouriteIds.size() < 1){
+                return new PaginatedRecipeDto(1, pageSize, 1, recommendedRecipes);
+            }
+        }catch (Exception e){
+            return new PaginatedRecipeDto(1, pageSize, 1, recommendedRecipes);
+        }
+
+
+        List<RecipeCuisine> cuisines =  new ArrayList<>(Collections.emptyList());
+        List<RecipeCategory> categories =  new ArrayList<>(Collections.emptyList());
+
+
+
+        for (String favouriteRecipe : favouriteIds){
+            Recipe recipe = recipeRepository.findRecipeById(favouriteRecipe);
+            if(recipe != null){
+                categories.addAll(recipe.getCategories());
+                cuisines.addAll(recipe.getCuisines());
+            }
+        }
+        Map<RecipeCategory, Integer> countCategories = new HashMap<>(Collections.emptyMap());
+        Map<RecipeCuisine, Integer> countCuisines = new HashMap<>(Collections.emptyMap());
+        int maxCountCategories = 1;
+        int maxCountCuisines = 1;
+        for(RecipeCategory category : categories){
+            if(countCategories.containsKey(category)){
+               int value = countCategories.get(category) + 1;
+               if(value>maxCountCategories){
+                   maxCountCategories = value;
+               }
+               countCategories.replace(category, value);
+            }else{
+                countCategories.put(category,1);
+            }
+        }
+        for(RecipeCuisine cuisine : cuisines){
+            if(countCuisines.containsKey(cuisine)){
+                int value = countCuisines.get(cuisine) + 1;
+                if(value>maxCountCuisines){
+                    maxCountCuisines = value;
+                }
+                countCuisines.replace(cuisine, value);
+            }else{
+                countCuisines.put(cuisine,1);
+            }
+        }
+        List<RecipeCuisine> favouriteCuisines =  new ArrayList<>(Collections.emptyList());
+        List<RecipeCategory> favouriteCategories =  new ArrayList<>(Collections.emptyList());
+
+        for(Map.Entry<RecipeCuisine, Integer> entry : countCuisines.entrySet()){
+            if(entry.getValue() == maxCountCuisines){
+                favouriteCuisines.add(entry.getKey());
+            }
+        }
+        for(Map.Entry<RecipeCategory, Integer> entry : countCategories.entrySet()){
+            if(entry.getValue() == maxCountCategories){
+                favouriteCategories.add(entry.getKey());
+            }
+        }
+        List<Recipe> recipes = new ArrayList<>(Collections.emptyList());
+
+        List<Recipe> recipesFromFavouriteCuisines = recipeRepository.queryRecipes("",new ArrayList<>(Collections.emptyList()),Arrays.asList(RecipeCategory.values()),favouriteCuisines);
+        List<Recipe> recipesFromFavouriteCategories = recipeRepository.queryRecipes("",new ArrayList<>(Collections.emptyList()),favouriteCategories,Arrays.asList(RecipeCuisine.values()));
+
+        recipes.addAll(recipesFromFavouriteCuisines);
+        for(Recipe recipe : recipesFromFavouriteCategories){
+            if(!recipes.contains(recipe)){
+                recipes.add(recipe);
+            }
+        }
+        for (Recipe recipe : recipes){
+            if(!favouriteIds.contains(recipe.getId())){
+                recommendedRecipes.add(recipe);
+            }
+        }
+
+
+        Integer pagesCount = (int) Math.ceil(recommendedRecipes.size()/(double)pageSize);
+        if(page>pagesCount){
+            page = pagesCount;
+        }
+        if(page<1){
+            pagesCount=1;
+            page=1;
+        }
+
+        return new PaginatedRecipeDto(page,pageSize,pagesCount,recommendedRecipes.stream().skip((page-1)*pageSize).limit(pageSize).toList());
+    }
+
+    @Override
     public void deleteRecipe(String id) {
         recipeRepository.deleteById(id);
     }

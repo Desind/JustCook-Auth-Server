@@ -139,7 +139,6 @@ public class RecipeController {
                 return ResponseEntity.status(402).build();
             }
         }
-        log.info("not present");
         return ResponseEntity.status(403).build();
     }
 

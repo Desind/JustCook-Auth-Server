@@ -39,7 +39,6 @@ public class RecipeServiceImpl implements RecipeService {
         if(newRecipeDto.getDifficulty() != null){
             recipeDifficulty = newRecipeDto.getDifficulty();
         }
-        System.out.println(newRecipeDto.toString());
         if(newRecipeDto.getCategories().isEmpty()){
             newRecipeDto.setCategories(List.of(RecipeCategory.OTHER));
         }
@@ -281,6 +280,7 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe editRecipe(String email, Recipe recipe){
         String userId = cookUserRepository.findByEmail(email).getId();
         if(userId.equals(recipe.getOwner()) && recipeRepository.existsById(recipe.getId())){
+            System.out.println(recipe.getId());
             return recipeRepository.save(recipe);
         }
         return null;

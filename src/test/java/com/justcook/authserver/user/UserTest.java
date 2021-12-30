@@ -4,14 +4,20 @@ import com.justcook.authserver.dto.NewUserDto;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
+import static io.restassured.RestAssured.given;
+
 public class UserTest {
+    private static final String URL = "http://localhost:8080/api";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9." +
+            "eyJzdWIiOiJhcnJydXNzc2RiQGdtYWlsLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly" +
+            "9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0MDg3MjY2NSwidXNlcm5hbWUiOiJBcmVrIn0.OgfgKH_fOdRkgzI8W0pQEbb1kXVMU7Pi7ZF8bkk_4cY";
+
     @Test
     public void checkRegistrationStatusCode() {
-        RestAssured.baseURI ="http://localhost:8080/api";
+        RestAssured.baseURI = URL;
         //Given
         RequestSpecification request = RestAssured.given();
 
@@ -34,5 +40,44 @@ public class UserTest {
 
         //Then
         Assert.assertEquals("201", String.valueOf(statusCode));
+    }
+
+    @Test
+    public void checkGetAllUsers() {
+        //Given
+        RestAssured.baseURI ="http://localhost:8080/api/users";
+        //authorization header has to be fresh
+        RequestSpecification request = RestAssured.given().header("Authorization", ACCESS_TOKEN);
+        request.contentType("application/json");
+
+        //When
+        Response response = request.
+                get();
+        int statusCode = response.getStatusCode();
+
+        //Then
+        Assert.assertEquals("200", String.valueOf(statusCode));
+    }
+
+    @Test
+    public void likeRecipeStatusCode() {
+        given().
+                header("Authorization", ACCESS_TOKEN).
+                when().
+                put(URL+"/like-recipe/61a745d181410247d1451b0a").
+                then().
+                assertThat().
+                statusCode(200);
+    }
+
+    @Test
+    public void dislikeRecipeStatusCode() {
+        given().
+                header("Authorization", ACCESS_TOKEN).
+                when().
+                delete(URL+"/dislike-recipe/61a745d181410247d1451b0a").
+                then().
+                assertThat().
+                statusCode(200);
     }
 }

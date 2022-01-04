@@ -201,6 +201,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
         UserProfileDto userProfileDto = null;
         if(cookUser.isPresent()){
             userProfileDto = new UserProfileDto(
+                    cookUser.get().getId(),
                     cookUser.get().getUsername(),
                     cookUser.get().getEmail(),
                     cookUser.get().getRegistrationDate(),

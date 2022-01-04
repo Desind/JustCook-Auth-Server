@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class UserProfileDto {
+    private String id;
     private String username;
     private String email;
     private LocalDateTime registrationDate;

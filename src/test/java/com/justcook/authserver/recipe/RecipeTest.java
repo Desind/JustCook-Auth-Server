@@ -3,15 +3,21 @@ package com.justcook.authserver.recipe;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.dto.NewRecipeDto;
 import com.justcook.authserver.model.Allergens;
+import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.Recipe.RecipeCategory;
 import com.justcook.authserver.model.Recipe.RecipeCuisine;
 import com.justcook.authserver.model.Recipe.RecipeDifficulty;
+import com.justcook.authserver.service.RecipeServiceImpl;
+import com.justcook.authserver.service.interfaces.RecipeService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +26,7 @@ import static io.restassured.RestAssured.*;
 
 public class RecipeTest {
     private static final String URL = "http://localhost:8080/api";
-    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9." +
-            "eyJzdWIiOiJhcnJydXNzc2RiQGdtYWlsLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly" +
-            "9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0MDg3MjY2NSwidXNlcm5hbWUiOiJBcmVrIn0.OgfgKH_fOdRkgzI8W0pQEbb1kXVMU7Pi7ZF8bkk_4cY";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQxNDcyODY1LCJ1c2VybmFtZSI6IkRlc2luZCJ9.F3riLLZE-BA01BwnKBWqqWjo9AowoHUl6p23snlOxX8";
 
     @Test
     public void checkGetRecipesStatusCode() {
@@ -151,5 +155,64 @@ public class RecipeTest {
 
         //Then
         Assert.assertEquals("200", String.valueOf(statusCode));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "ingredient1,ingredient2,true",
+            "ingredients1,INGREDIENTS2,false",
+            ",,false"
+    })
+    public void checkGetRecipesWithIngredients(String ingredient1, String ingredient2, boolean expectedResult){
+        //Given
+        NewRecipeDto newRecipeDto = new NewRecipeDto("search test title",
+                "search test description",
+                List.of("ingredient","ingredient2"),
+                List.of("step1","step2"),
+                List.of(Allergens.LUPINE),
+                List.of(RecipeCategory.DINNER),
+                List.of(RecipeCuisine.CHINESE),
+                15,
+                List.of("testimg"),
+                RecipeDifficulty.HARD);
+
+        //ADD RECIPE
+        RequestSpecification request = RestAssured.given();
+        request.body(newRecipeDto);
+        request.header("Authorization", ACCESS_TOKEN);
+        request.contentType("application/json");
+        Recipe resultRecipe = request.post(URL + "/recipe").then()
+                .assertThat()
+                .statusCode(201)
+                .extract()
+                .as(Recipe.class);
+
+
+        //SEARCH
+        RequestSpecification searchRequest = RestAssured.given();
+        searchRequest.contentType("application/json");
+        String searchedRecipes = get(URL + "/recipes-with-ingredients?ingredients=" + ingredient1 + "," + ingredient2).then()
+                .assertThat()
+                .statusCode(200)
+                .extract()
+                .asString();
+        System.out.println("#############################################################");
+        System.out.println("");
+        System.out.println("#############################################################");
+        System.out.println(searchedRecipes);
+        if(expectedResult){
+            Assert.assertTrue(searchedRecipes.contains(resultRecipe.getId()));
+        }else{
+            Assert.assertFalse(searchedRecipes.contains(resultRecipe.getId()));
+        }
+
+        //CLEAR
+        RequestSpecification clearRequest = RestAssured.given();
+        clearRequest.header("Authorization", ACCESS_TOKEN);
+        clearRequest.contentType("application/json");
+        clearRequest.delete(URL + "/recipe/" + resultRecipe.getId()).then()
+                .assertThat()
+                .statusCode(200);
+
     }
 }

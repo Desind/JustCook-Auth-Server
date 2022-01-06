@@ -84,7 +84,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getRecipesWithIngredients(List<String> ingredients) {
-        return recipeRepository.findRecipesByIngredients(ingredients);
+        String newRegex = "^";
+        for (String ingredient : ingredients) {
+            newRegex += "(?=.*\\b" + ingredient.toUpperCase() + "\\b)";
+        }
+        newRegex += ".*$";
+        return recipeRepository.findRecipesByIngredients(newRegex);
     }
 
     @Override
@@ -95,6 +100,11 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<RecipeCuisine> getRecipeCuisines() {
         return Arrays.asList(RecipeCuisine.values());
+    }
+
+    @Override
+    public void deleteRecipe(String id) {
+        recipeRepository.deleteById(id);
     }
 
 

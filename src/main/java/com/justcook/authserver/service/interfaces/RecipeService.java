@@ -19,4 +19,5 @@ public interface RecipeService {
     List<Recipe> getRecipesWithIngredients(List<String> ingredients);
     List<RecipeCategory> getRecipeCategories();
     List<RecipeCuisine> getRecipeCuisines();
+    void deleteRecipe(String id);
 }

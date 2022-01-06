@@ -68,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/recipe").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/recipe/**").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product").hasAnyAuthority(UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new AuthenticationFilter(authenticationManagerBean(),cookUserService));

@@ -15,4 +15,5 @@ public enum RecipeCategory {
     HOLIDAY,
     VEGAN,
     VEGETARIAN,
+    OTHER
 }

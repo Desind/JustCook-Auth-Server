@@ -1,11 +1,16 @@
 package com.justcook.authserver.user;
 
 import com.justcook.authserver.dto.NewUserDto;
+import com.justcook.authserver.dto.RoleToUserDto;
+import com.justcook.authserver.model.Recipe.Recipe;
+import com.justcook.authserver.model.User.UserRole;
+import com.justcook.authserver.service.CookUserServiceImpl;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static io.restassured.RestAssured.given;
 
@@ -13,6 +18,7 @@ public class UserTest {
     private static final String URL = "http://localhost:8080/api";
     private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEZXNpbmQiLCJyb2xlcyI6WyJBRE1JTiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL3JlZnJlc2gtdG9rZW4iLCJleHAiOjE2NDE0ODI3MDJ9.BgQnPBprWcJwH4l5txIvWF_iPTvePJzR8MllcOgpeLM";
     private static final String REFRESH_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQxNDcyODY1LCJ1c2VybmFtZSI6IkRlc2luZCJ9.F3riLLZE-BA01BwnKBWqqWjo9AowoHUl6p23snlOxX8";
+
 
     @Test
     public void checkRegistrationStatusCode() {
@@ -95,6 +101,25 @@ public class UserTest {
                 .when()
                 .get(URL + "/permission-check")
                 .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+    @Test
+    public void checkGiveUserRole(){
+        RoleToUserDto roleToUserDto = new RoleToUserDto("g@gmail.com", UserRole.ADMIN.name());
+
+        RequestSpecification request = RestAssured.given();
+        request.body(roleToUserDto);
+        request.header("Authorization", ACCESS_TOKEN);
+        request.contentType("application/json");
+        request.post(URL + "/user-role").then()
+                .assertThat()
+                .statusCode(200);
+
+        roleToUserDto.setUserRole(UserRole.USER.name());
+        request.body(roleToUserDto);
+        request.post(URL + "/user-role").then()
                 .assertThat()
                 .statusCode(200);
     }

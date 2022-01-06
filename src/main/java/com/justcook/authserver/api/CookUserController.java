@@ -64,6 +64,4 @@ public class CookUserController {
         }
         return ResponseEntity.status(404).build();
     }
-
-    //TODO: ODCZYTYWANIE DANYCH UŻYTKOWNIKA
 }

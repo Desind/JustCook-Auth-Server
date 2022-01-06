@@ -12,6 +12,7 @@ import com.justcook.authserver.service.interfaces.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,7 +90,14 @@ public class RecipeServiceImpl implements RecipeService {
             newRegex += "(?=.*\\b" + ingredient.toUpperCase() + "\\b)";
         }
         newRegex += ".*$";
-        return recipeRepository.findRecipesByIngredients(newRegex);
+        List<Recipe> recipes = recipeRepository.findAll();
+        List<Recipe> recipesWithIngredients = new ArrayList<>();
+        for(Recipe recipe : recipes){
+            if(recipe.getIngredients().toString().toUpperCase().matches(newRegex)){
+                recipesWithIngredients.add(recipe);
+            }
+        }
+        return recipesWithIngredients;
     }
 
     @Override

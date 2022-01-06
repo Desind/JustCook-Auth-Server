@@ -159,7 +159,8 @@ public class RecipeTest {
 
     @ParameterizedTest
     @CsvSource({
-            "ingredient1,ingredient2,true",
+            "ingredient,ingredient2,true",
+            "ingredient,INGREDIENT,true",
             "ingredients1,INGREDIENTS2,false",
             ",,false"
     })
@@ -196,10 +197,6 @@ public class RecipeTest {
                 .statusCode(200)
                 .extract()
                 .asString();
-        System.out.println("#############################################################");
-        System.out.println("");
-        System.out.println("#############################################################");
-        System.out.println(searchedRecipes);
         if(expectedResult){
             Assert.assertTrue(searchedRecipes.contains(resultRecipe.getId()));
         }else{

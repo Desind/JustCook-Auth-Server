@@ -27,7 +27,7 @@ public class RecipeTest {
     private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcnJydXNzc2RiQGdtYWlsLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0MjA4MjYxNSwidXNlcm5hbWUiOiJBcmVrIn0.85PjHpUcHiSzGomtxMzLHuv7nHGAdDW-rngCQQ-QQGI";
 
     @Test
-    public void checkGetRecipesStatusCode() {
+    public void checkGetRecipes() {
         given().
                 when().
                 get(URL+"/recipes/1").
@@ -39,7 +39,7 @@ public class RecipeTest {
     }
 
     @Test
-    public void checkGetRecipesByIdStatusCode() {
+    public void checkGetRecipesById() {
         given().
                 when().
                 get(URL+"/recipe/61a4dfb7ff912b0badcb931d").
@@ -51,7 +51,7 @@ public class RecipeTest {
     }
 
     @Test
-    public void checkGetRecipesByOwnerStatusCode() {
+    public void checkGetRecipesByOwner() {
         given().
                 header("Authorization", ACCESS_TOKEN).
                 when().
@@ -64,7 +64,7 @@ public class RecipeTest {
     }
 
     @Test
-    public void checkGetRecipePaginationStatusCode() {
+    public void checkGetRecipePagination() {
         given().
                 header("Authorization", ACCESS_TOKEN).
                 when().
@@ -77,7 +77,7 @@ public class RecipeTest {
     }
 
     @Test
-    public void checkRegistrationStatusCode() {
+    public void checkRegistration() {
         RestAssured.baseURI = URL;
         //Given
         RequestSpecification request = RestAssured.given();
@@ -115,7 +115,7 @@ public class RecipeTest {
     }
 
     @Test
-    public void checkRecipesWithCuisineAndCategoryStatusCode() {
+    public void checkRecipesWithCuisineAndCategory() {
         RestAssured.baseURI = URL;
         //Given
         RequestSpecification request = RestAssured.given();
@@ -140,7 +140,7 @@ public class RecipeTest {
 
 
     @Test
-    public void checkGetRecipesStatusCodeV2() {
+    public void checkGetRecipesV2() {
         //Given
         RestAssured.baseURI = URL+"/recipes/1";
         RequestSpecification request = RestAssured.given();

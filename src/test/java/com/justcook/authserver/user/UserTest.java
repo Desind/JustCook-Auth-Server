@@ -18,7 +18,7 @@ public class UserTest {
 
 
     @Test
-    public void checkRegistrationStatusCode() {
+    public void checkRegistration() {
         RestAssured.baseURI = URL;
         //Given
         RequestSpecification request = RestAssured.given();
@@ -57,7 +57,7 @@ public class UserTest {
     }
 
     @Test
-    public void likeRecipeStatusCode() {
+    public void likeRecipe() {
         given().
                 header("Authorization", ACCESS_TOKEN).
                 when().
@@ -68,7 +68,7 @@ public class UserTest {
     }
 
     @Test
-    public void dislikeRecipeStatusCode() {
+    public void dislikeRecipe() {
         given().
                 header("Authorization", ACCESS_TOKEN).
                 when().

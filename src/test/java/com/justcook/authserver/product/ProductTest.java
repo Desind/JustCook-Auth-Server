@@ -15,7 +15,7 @@ public class ProductTest {
     private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcnJydXNzc2RiQGdtYWlsLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0MjA4MjYxNSwidXNlcm5hbWUiOiJBcmVrIn0.85PjHpUcHiSzGomtxMzLHuv7nHGAdDW-rngCQQ-QQGI";
 
     @Test
-    public void checkAddProductStatusCode() {
+    public void checkAddProduct() {
         RestAssured.baseURI = URL;
         //Given
         RequestSpecification request = RestAssured.given();
@@ -36,7 +36,7 @@ public class ProductTest {
     }
 
     @Test
-    public void checkGetProductByEanStatusCode() {
+    public void checkGetProductByEan() {
         given().
                 header("Authorization", ACCESS_TOKEN).
                 when().

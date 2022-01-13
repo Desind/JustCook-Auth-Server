@@ -1,0 +1,31 @@
+package com.justcook.authserver.model.Recipe;
+
+public enum RecipeCuisine {
+    FUSION,
+    HAUTE,
+    NOUVELLE,
+    AFRICAN,
+    INDIAN,
+    FRENCH,
+    BRITISH,
+    EUROPEAN,
+    ITALIAN,
+    AUSTRALIAN,
+    JEWISH,
+    ASIAN,
+    MEXICAN,
+    LATIN,
+    THAI,
+    CHINESE,
+    AMERICAN,
+    SPANISH,
+    TURKISH,
+    VIETNAMESE,
+    GREEK,
+    MORROCAN,
+    CARIBBEAN,
+    MEDITERRANEAN,
+    JAPANESE,
+    POLISH,
+    OTHER
+}

@@ -9,7 +9,6 @@ Ważne, żeby podczas instalacji java została dodana do ścieżki systemowej.
 Zweryfikować to można poprzez wpisanie w konsolę
 `java -version`
 
-
 #### Użyte technologii:
 - Backend: Spring Boot (Java)
 - Baza danych: MongoDB (znajdujące się w kontenerze dockera)

@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.given;
 
 public class ProductTest {
     private static final String URL = "http://localhost:8080/api";
-    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQxNDcyODY1LCJ1c2VybmFtZSI6IkRlc2luZCJ9.F3riLLZE-BA01BwnKBWqqWjo9AowoHUl6p23snlOxX8";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcnJydXNzc2RiQGdtYWlsLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0MjA4MjYxNSwidXNlcm5hbWUiOiJBcmVrIn0.85PjHpUcHiSzGomtxMzLHuv7nHGAdDW-rngCQQ-QQGI";
 
     @Test
     public void checkAddProductStatusCode() {
@@ -20,8 +20,8 @@ public class ProductTest {
         //Given
         RequestSpecification request = RestAssured.given();
         Product product = new Product();
-        product.setEan("7610036000429");
-        product.setName("Larmes de Poire Williams");
+        product.setEan("5610036042912");
+        product.setName("Golden chicken");
         //When
         request.body(product);
         request.contentType("application/json");

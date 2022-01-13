@@ -2,22 +2,19 @@ package com.justcook.authserver.user;
 
 import com.justcook.authserver.dto.NewUserDto;
 import com.justcook.authserver.dto.RoleToUserDto;
-import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.User.UserRole;
-import com.justcook.authserver.service.CookUserServiceImpl;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static io.restassured.RestAssured.given;
 
 public class UserTest {
     private static final String URL = "http://localhost:8080/api";
-    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEZXNpbmQiLCJyb2xlcyI6WyJBRE1JTiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL3JlZnJlc2gtdG9rZW4iLCJleHAiOjE2NDE0ODI3MDJ9.BgQnPBprWcJwH4l5txIvWF_iPTvePJzR8MllcOgpeLM";
-    private static final String REFRESH_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQxNDcyODY1LCJ1c2VybmFtZSI6IkRlc2luZCJ9.F3riLLZE-BA01BwnKBWqqWjo9AowoHUl6p23snlOxX8";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcnJydXNzc2RiQGdtYWlsLmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiIsImV4cCI6MTY0MjA4MjYxNSwidXNlcm5hbWUiOiJBcmVrIn0.85PjHpUcHiSzGomtxMzLHuv7nHGAdDW-rngCQQ-QQGI";
+    private static final String REFRESH_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcnJydXNzc2RiQGdtYWlsLmNvbSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9sb2dpbiJ9.tk8PTncAJ7jk4tSI43-LcDsfjoKrC18maiy7vvpDlek";
 
 
     @Test
@@ -26,16 +23,11 @@ public class UserTest {
         //Given
         RequestSpecification request = RestAssured.given();
 
-        //When !user has to be unique - should not exist in the DB
-//        JSONObject requestParams = new JSONObject();
-//        requestParams.put("username", "Gienek");
-//        requestParams.put("email", "g@gmail.com");
-//        requestParams.put("password", "gienek123");
+        //When
         NewUserDto user = new NewUserDto();
         user.setUsername("Gienek");
         user.setEmail("g@gmail.com");
         user.setPassword("gienek123");
-//        request.body(requestParams.toJSONString());
         request.body(user);
         request.contentType("application/json");
 

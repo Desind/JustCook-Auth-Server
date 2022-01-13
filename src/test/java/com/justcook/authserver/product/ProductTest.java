@@ -1,6 +1,5 @@
 package com.justcook.authserver.product;
 
-import com.justcook.authserver.dto.NewUserDto;
 import com.justcook.authserver.model.Product.Product;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -8,10 +7,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 

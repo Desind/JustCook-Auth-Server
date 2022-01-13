@@ -42,7 +42,6 @@ public class CookUserController {
 
     @PostMapping("/user-role")
     public ResponseEntity<?> giveCookUserRole(@RequestBody RoleToUserDto form){
-        log.info(form.toString());
         cookUserService.giveUserRole(form.getEmail(), form.getUserRole());
         return ResponseEntity.status(200).build();
     }
@@ -65,5 +64,12 @@ public class CookUserController {
         return ResponseEntity.status(404).build();
     }
 
-    //TODO: ODCZYTYWANIE DANYCH UŻYTKOWNIKA
+    @GetMapping("/permission-check")
+    public ResponseEntity<?> permissionCheck(){
+        return ResponseEntity.status(200).build();
+    }
+    @GetMapping("/admin-permission-check")
+    public ResponseEntity<?> adminPermissionCheck(){
+        return ResponseEntity.status(200).build();
+    }
 }

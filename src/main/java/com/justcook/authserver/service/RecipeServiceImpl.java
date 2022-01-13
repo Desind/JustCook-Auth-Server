@@ -12,6 +12,7 @@ import com.justcook.authserver.service.interfaces.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,7 +85,19 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getRecipesWithIngredients(List<String> ingredients) {
-        return recipeRepository.findRecipesByIngredients(ingredients);
+        String newRegex = "^";
+        for (String ingredient : ingredients) {
+            newRegex += "(?=.*\\b" + ingredient.toUpperCase() + "\\b)";
+        }
+        newRegex += ".*$";
+        List<Recipe> recipes = recipeRepository.findAll();
+        List<Recipe> recipesWithIngredients = new ArrayList<>();
+        for(Recipe recipe : recipes){
+            if(recipe.getIngredients().toString().toUpperCase().matches(newRegex)){
+                recipesWithIngredients.add(recipe);
+            }
+        }
+        return recipesWithIngredients;
     }
 
     @Override
@@ -95,6 +108,11 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<RecipeCuisine> getRecipeCuisines() {
         return Arrays.asList(RecipeCuisine.values());
+    }
+
+    @Override
+    public void deleteRecipe(String id) {
+        recipeRepository.deleteById(id);
     }
 
 

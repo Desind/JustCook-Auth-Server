@@ -7,8 +7,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.justcook.authserver.dto.NewUserDto;
 import com.justcook.authserver.model.User.CookUser;
-import com.justcook.authserver.model.User.UserStatus;
 import com.justcook.authserver.model.User.UserRole;
+import com.justcook.authserver.model.User.UserStatus;
 import com.justcook.authserver.repository.CookUserRepository;
 import com.justcook.authserver.service.interfaces.CookUserService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Service
+@Service("cookUserService")
 @RequiredArgsConstructor
 @Slf4j
 public class CookUserServiceImpl implements CookUserService, UserDetailsService {

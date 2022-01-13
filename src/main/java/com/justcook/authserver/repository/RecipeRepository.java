@@ -17,7 +17,7 @@ public interface RecipeRepository extends MongoRepository<Recipe, String> {
     List<Recipe> findRecipesByCategoriesContainsOrCuisinesContains(List<RecipeCategory> categories, List<RecipeCuisine> cuisines);
     List<Recipe> findRecipesByCuisinesContains(List<RecipeCuisine> cuisines);
     List<Recipe> findRecipesByCategoriesContains(List<RecipeCategory> categories);
-    @Query("{ 'ingredients': {$all: ?0}}")
-    List<Recipe> findRecipesByIngredients(List<String> ingredients);
+    @Query("{ 'ingredients': {'$regex' : ?0, '$options' : 'i'}}")
+    List<Recipe> findRecipesByIngredients(String ingredients);
 
 }

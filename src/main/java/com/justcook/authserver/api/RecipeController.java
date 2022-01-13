@@ -6,6 +6,8 @@ import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
 import com.justcook.authserver.model.Recipe.RecipeCategory;
 import com.justcook.authserver.model.Recipe.RecipeCuisine;
+import com.justcook.authserver.model.User.CookUser;
+import com.justcook.authserver.model.User.UserRole;
 import com.justcook.authserver.service.CookUserServiceImpl;
 import com.justcook.authserver.service.RecipeServiceImpl;
 import lombok.AllArgsConstructor;
@@ -84,5 +86,21 @@ public class RecipeController {
     @GetMapping("/cuisines")
     public ResponseEntity<List<RecipeCuisine>> getRecipeCuisines(){
         return ResponseEntity.status(200).body(recipeService.getRecipeCuisines());
+    }
+
+    @DeleteMapping("/recipe/{id}")
+    public ResponseEntity<?> deleteRecipe(HttpServletRequest request, @PathVariable String id){
+        String user_id = String.valueOf(request.getAttribute("username"));
+        CookUser cookUser = cookUserService.getCookUserByEmail(user_id);
+        Recipe recipe = recipeService.getRecipeById(id);
+        if(cookUser != null){
+            if(cookUser.getUserRoles().contains(UserRole.ADMIN) || (cookUser.getId().equals(recipe.getOwner()))){
+                recipeService.deleteRecipe(id);
+                return ResponseEntity.status(200).build();
+            }else{
+                return ResponseEntity.status(402).build();
+            }
+        }
+        return ResponseEntity.status(403).build();
     }
 }

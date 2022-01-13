@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 @Controller
 @RequestMapping("/api")
 @AllArgsConstructor
@@ -68,6 +70,7 @@ public class CookUserController {
     public ResponseEntity<?> permissionCheck(){
         return ResponseEntity.status(200).build();
     }
+
     @GetMapping("/admin-permission-check")
     public ResponseEntity<?> adminPermissionCheck(){
         return ResponseEntity.status(200).build();

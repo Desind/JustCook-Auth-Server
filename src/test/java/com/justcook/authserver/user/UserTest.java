@@ -16,8 +16,8 @@ import static io.restassured.RestAssured.given;
 
 public class UserTest {
     private static final String URL = "http://localhost:8080/api";
-    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEZXNpbmQiLCJyb2xlcyI6WyJBRE1JTiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL3JlZnJlc2gtdG9rZW4iLCJleHAiOjE2NDE0ODI3MDJ9.BgQnPBprWcJwH4l5txIvWF_iPTvePJzR8MllcOgpeLM";
-    private static final String REFRESH_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQxNDcyODY1LCJ1c2VybmFtZSI6IkRlc2luZCJ9.F3riLLZE-BA01BwnKBWqqWjo9AowoHUl6p23snlOxX8";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQyMDgwNDc5LCJ1c2VybmFtZSI6IkRlc2luZCJ9.w_3-F3qm3BUXcesYXPwkEk3ufi3PCn05lfh1GodRFio";
+    private static final String REFRESH_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIn0.VIuWcB1hjoL5HQqMpzC0rjXny1oIH-2Oyb44C4XZtY0";
 
 
     @Test
@@ -26,16 +26,11 @@ public class UserTest {
         //Given
         RequestSpecification request = RestAssured.given();
 
-        //When !user has to be unique - should not exist in the DB
-//        JSONObject requestParams = new JSONObject();
-//        requestParams.put("username", "Gienek");
-//        requestParams.put("email", "g@gmail.com");
-//        requestParams.put("password", "gienek123");
+        //When
         NewUserDto user = new NewUserDto();
-        user.setUsername("Gienek");
-        user.setEmail("g@gmail.com");
+        user.setUsername("Gienek1");
+        user.setEmail("g1@gmail.com");
         user.setPassword("gienek123");
-//        request.body(requestParams.toJSONString());
         request.body(user);
         request.contentType("application/json");
 
@@ -51,7 +46,6 @@ public class UserTest {
     public void checkGetAllUsers() {
         //Given
         RestAssured.baseURI ="http://localhost:8080/api/users";
-        //authorization header has to be fresh
         RequestSpecification request = RestAssured.given().header("Authorization", ACCESS_TOKEN);
         request.contentType("application/json");
 

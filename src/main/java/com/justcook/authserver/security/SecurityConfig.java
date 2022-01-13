@@ -64,10 +64,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/permission-check").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/admin-permission-check").hasAnyAuthority(UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/cuisines").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/refresh-token").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/categories").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipes-with-ingredients**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipes/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/recipe/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/recipes-without-allergens/**").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/recipe").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/recipe/**").hasAnyAuthority(UserRole.USER.name(), UserRole.MODERATOR.name(), UserRole.ADMIN.name());

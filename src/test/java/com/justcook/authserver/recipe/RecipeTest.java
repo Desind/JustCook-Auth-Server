@@ -26,7 +26,7 @@ import static io.restassured.RestAssured.*;
 
 public class RecipeTest {
     private static final String URL = "http://localhost:8080/api";
-    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6YXJhbjE5OThAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjQxNDcyODY1LCJ1c2VybmFtZSI6IkRlc2luZCJ9.F3riLLZE-BA01BwnKBWqqWjo9AowoHUl6p23snlOxX8";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEZXNpbmQiLCJyb2xlcyI6WyJBRE1JTiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL3JlZnJlc2gtdG9rZW4iLCJleHAiOjE2NDIwODE1MDV9.QfVhLLaxJysfWLvur9s1G4x49HIaage-FV6TxAF-YCk";
 
     @Test
     public void checkGetRecipesStatusCode() {
@@ -44,7 +44,7 @@ public class RecipeTest {
     public void checkGetRecipesByIdStatusCode() {
         given().
                 when().
-                get(URL+"/recipe/61a4dfb7ff912b0badcb931d").
+                get(URL+"/recipe/61c08aea0e56be3f7899d389").
                 then().
                 assertThat().
                 statusCode(200).
@@ -57,7 +57,7 @@ public class RecipeTest {
         given().
                 header("Authorization", ACCESS_TOKEN).
                 when().
-                get(URL+"/owner-recipes/61964affddc5b23eb021c7dd").
+                get(URL+"/owner-recipes/61a49fd3c7673d0cbd6384cc").
                 then().
                 assertThat().
                 statusCode(200).

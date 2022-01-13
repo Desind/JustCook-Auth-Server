@@ -111,7 +111,6 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
                 String username = decodedJWT.getSubject();
                 CookUser user = getCookUserByEmail(username);
-                log.warn("User: {}", user.toString());
                 Date date = new Date(System.currentTimeMillis() + 4 * 60 * 60 * 1000);
                 String accessToken = JWT.create()
                         .withSubject(user.getUsername())

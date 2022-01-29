@@ -58,10 +58,15 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
 
     @Override
     public CookUser saveUser(NewUserDto newUserDto) {
+        List<CookUser> cookUsers = cookUserRepository.findAll();
         CookUser cookUser = new CookUser();
         cookUser.setEmail(newUserDto.getEmail());
         cookUser.setUsername(newUserDto.getUsername());
-        cookUser.setUserRoles(List.of(UserRole.USER));
+        if(cookUsers.isEmpty()){
+            cookUser.setUserRoles(List.of(UserRole.ADMIN));
+        }else{
+            cookUser.setUserRoles(List.of(UserRole.USER));
+        }
         cookUser.setRegistrationDate(LocalDateTime.now());
         cookUser.setStatus(UserStatus.NEW);
         cookUser.setAllergies(List.of());

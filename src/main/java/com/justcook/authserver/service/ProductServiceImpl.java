@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -46,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
         return new PaginatedProductsDto(page,
                 pageSize,
                 pagesCount,
-                products.stream().skip((page-1)*pageSize).limit(pageSize).toList());
+                products.stream().skip((page-1)*pageSize).limit(pageSize).collect(Collectors.toList()));
     }
 
     @Override

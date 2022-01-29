@@ -76,7 +76,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getRecipesWithoutAlergens(List<Allergens> alergens, int page, int records){
-        return recipeRepository.findRecipesByAllergensNotContains(alergens).stream().skip((page-1)*records).limit(records).toList();
+        return recipeRepository.findRecipesByAllergensNotContains(alergens).stream().skip((page-1)*records).limit(records).collect(Collectors.toList());
     }
 
     @Override
@@ -117,7 +117,7 @@ public class RecipeServiceImpl implements RecipeService {
             page=1;
         }
         recipesWithIngredients.sort(Comparator.comparing(Recipe::getCreationDate).reversed());
-        PaginatedRecipeDto paginatedRecipeDto =  new PaginatedRecipeDto(page,pageSize,pagesCount,recipesWithIngredients.stream().skip((page-1)*pageSize).limit(pageSize).toList());
+        PaginatedRecipeDto paginatedRecipeDto =  new PaginatedRecipeDto(page,pageSize,pagesCount,recipesWithIngredients.stream().skip((page-1)*pageSize).limit(pageSize).collect(Collectors.toList()));
         return paginatedRecipeDto;
     }
 
@@ -246,7 +246,7 @@ public class RecipeServiceImpl implements RecipeService {
             page=1;
         }
 
-        return new PaginatedRecipeDto(page,pageSize,pagesCount,recommendedRecipes.stream().skip((page-1)*pageSize).limit(pageSize).toList());
+        return new PaginatedRecipeDto(page,pageSize,pagesCount,recommendedRecipes.stream().skip((page-1)*pageSize).limit(pageSize).collect(Collectors.toList()));
     }
 
     @Override
@@ -274,7 +274,7 @@ public class RecipeServiceImpl implements RecipeService {
                 page,
                 pageSize,
                 pagesCount,
-                recipeList.stream().skip((page-1)*pageSize).limit(pageSize).toList());
+                recipeList.stream().skip((page-1)*pageSize).limit(pageSize).collect(Collectors.toList()));
     }
 
     public Recipe editRecipe(String email, Recipe recipe){

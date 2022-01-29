@@ -63,13 +63,13 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
         cookUser.setEmail(newUserDto.getEmail());
         cookUser.setUsername(newUserDto.getUsername());
         if(cookUsers.isEmpty()){
-            cookUser.setUserRoles(List.of(UserRole.ADMIN));
+            cookUser.setUserRoles(Collections.singletonList(UserRole.ADMIN));
         }else{
-            cookUser.setUserRoles(List.of(UserRole.USER));
+            cookUser.setUserRoles(Collections.singletonList(UserRole.USER));
         }
         cookUser.setRegistrationDate(LocalDateTime.now());
         cookUser.setStatus(UserStatus.NEW);
-        cookUser.setAllergies(List.of());
+        cookUser.setAllergies(Collections.emptyList());
         cookUser.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
         try {
             return cookUserRepository.save(cookUser);
@@ -81,7 +81,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
     @Override
     public void giveUserRole(String email, UserRole userRole) {
         CookUser cookUser = cookUserRepository.findByEmail(email);
-        cookUser.setUserRoles(List.of(userRole));
+        cookUser.setUserRoles(Collections.singletonList(userRole));
         cookUserRepository.save(cookUser);
     }
 

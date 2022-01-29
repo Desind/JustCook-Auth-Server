@@ -92,7 +92,7 @@ public class CookUserController {
         if(!(recipesId == null)){
             favouriteRecipes.put("favouriteRecipes",recipesId);
         }else{
-            favouriteRecipes.put("favouriteRecipes",List.of());
+            favouriteRecipes.put("favouriteRecipes",Collections.emptyList());
         }
         return ResponseEntity.status(200).body(favouriteRecipes);
     }

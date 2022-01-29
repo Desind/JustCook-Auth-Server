@@ -40,10 +40,10 @@ public class RecipeServiceImpl implements RecipeService {
             recipeDifficulty = newRecipeDto.getDifficulty();
         }
         if(newRecipeDto.getCategories().isEmpty()){
-            newRecipeDto.setCategories(List.of(RecipeCategory.OTHER));
+            newRecipeDto.setCategories(Collections.singletonList(RecipeCategory.OTHER));
         }
         if(newRecipeDto.getCuisines().isEmpty()){
-            newRecipeDto.setCuisines(List.of(RecipeCuisine.OTHER));
+            newRecipeDto.setCuisines(Collections.singletonList(RecipeCuisine.OTHER));
         }
 
         Recipe recipe = new Recipe(

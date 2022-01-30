@@ -5,11 +5,15 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.justcook.authserver.dto.CookUserDto;
 import com.justcook.authserver.dto.NewUserDto;
+import com.justcook.authserver.dto.UserImageDto;
+import com.justcook.authserver.dto.UserProfileDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.model.User.UserRole;
 import com.justcook.authserver.model.User.UserStatus;
 import com.justcook.authserver.repository.CookUserRepository;
+import com.justcook.authserver.repository.RecipeRepository;
 import com.justcook.authserver.service.interfaces.CookUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,16 +40,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CookUserServiceImpl implements CookUserService, UserDetailsService {
 
     final CookUserRepository cookUserRepository;
+    final RecipeRepository recipeRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         CookUser cookUser = cookUserRepository.findByEmail(email);
         if(cookUser == null) {
-            log.error("User not found");
             throw new UsernameNotFoundException("User not found");
-        } else {
-            log.info("User found: " + cookUser.getUsername());
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (UserRole role : cookUser.getUserRoles()) {
@@ -56,13 +58,18 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
 
     @Override
     public CookUser saveUser(NewUserDto newUserDto) {
+        List<CookUser> cookUsers = cookUserRepository.findAll();
         CookUser cookUser = new CookUser();
         cookUser.setEmail(newUserDto.getEmail());
         cookUser.setUsername(newUserDto.getUsername());
-        cookUser.setUserRoles(List.of(UserRole.USER));
+        if(cookUsers.isEmpty()){
+            cookUser.setUserRoles(Collections.singletonList(UserRole.ADMIN));
+        }else{
+            cookUser.setUserRoles(Collections.singletonList(UserRole.USER));
+        }
         cookUser.setRegistrationDate(LocalDateTime.now());
         cookUser.setStatus(UserStatus.NEW);
-        cookUser.setAllergies(List.of());
+        cookUser.setAllergies(Collections.emptyList());
         cookUser.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
         try {
             return cookUserRepository.save(cookUser);
@@ -72,11 +79,9 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
     }
 
     @Override
-    public void giveUserRole(String email, String userRole) {
+    public void giveUserRole(String email, UserRole userRole) {
         CookUser cookUser = cookUserRepository.findByEmail(email);
-        if(!cookUser.getUserRoles().contains(UserRole.valueOf(userRole))){
-            cookUser.getUserRoles().add(UserRole.valueOf(userRole));
-        }
+        cookUser.setUserRoles(Collections.singletonList(userRole));
         cookUserRepository.save(cookUser);
     }
 
@@ -91,7 +96,7 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
     }
 
     @Override
-    public CookUser getCookUserByUsername(String username) {
+    public Optional<CookUser> getCookUserByUsername(String username) {
         return cookUserRepository.findByUsername(username);
     }
 
@@ -168,4 +173,56 @@ public class CookUserServiceImpl implements CookUserService, UserDetailsService 
             return false;
         }
     }
+
+    @Override
+    public String getUsernameFromId(String id) {
+        Optional<CookUser> cookUser = cookUserRepository.findById(id);
+        return cookUser.map(CookUser::getUsername).orElse(null);
+    }
+
+    @Override
+    public List<String> getUserFavouriteRecipes(String id) {
+        Optional<CookUser> cookUser = cookUserRepository.findById(id);
+        return cookUser.map(CookUser::getFavouriteRecipes).orElse(null);
+    }
+
+    @Override
+    public List<CookUserDto> findByUsernameContainsAndRole(String username, List<UserRole> role) {
+        List<CookUserDto> cookUserDtoList = cookUserRepository.findByUsernameContainsAndUserRolesContaining(username,role);
+        for(CookUserDto user : cookUserDtoList){
+            user.setRecipesCreated(recipeRepository.countRecipesByOwner(user.getId()));
+        }
+        return cookUserDtoList;
+    }
+
+    @Override
+    public void deleteUser(String id) {
+        cookUserRepository.deleteById(id);
+    }
+
+    @Override
+    public UserProfileDto getUserProfile(String id){
+        Optional<CookUser> cookUser = Optional.ofNullable(cookUserRepository.findByEmail(id));
+        UserProfileDto userProfileDto = null;
+        if(cookUser.isPresent()){
+            userProfileDto = new UserProfileDto(
+                    cookUser.get().getId(),
+                    cookUser.get().getUsername(),
+                    cookUser.get().getEmail(),
+                    cookUser.get().getRegistrationDate(),
+                    cookUser.get().getUserRoles(),
+                    cookUser.get().getImage(),
+                    cookUser.get().getFavouriteRecipes(),
+                    cookUser.get().getAllergies());
+        }
+        return userProfileDto;
+    }
+
+    @Override
+    public CookUser setUserImage(String email, UserImageDto userImage){
+        CookUser cookUser = cookUserRepository.findByEmail(email);
+        cookUser.setImage(userImage.getImage());
+        return cookUserRepository.save(cookUser);
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.justcook.authserver.api;
 
 import com.justcook.authserver.dto.NewUserDto;
+import com.justcook.authserver.dto.UserImageDto;
+import com.justcook.authserver.dto.UserProfileDto;
 import com.justcook.authserver.model.User.CookUser;
 import com.justcook.authserver.dto.RoleToUserDto;
 import com.justcook.authserver.service.interfaces.CookUserService;
@@ -40,12 +42,6 @@ public class CookUserController {
         return ResponseEntity.status(200).body(cookUsers);
     }
 
-    @PostMapping("/user-role")
-    public ResponseEntity<?> giveCookUserRole(@RequestBody RoleToUserDto form){
-        cookUserService.giveUserRole(form.getEmail(), form.getUserRole());
-        return ResponseEntity.status(200).build();
-    }
-
     @GetMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         cookUserService.tokenRefresh(request, response);
@@ -61,15 +57,43 @@ public class CookUserController {
         if(cookUserService.dislikeRecipe(String.valueOf(request.getAttribute("username")),id)){
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-        return ResponseEntity.status(404).build();
+        return ResponseEntity.status(204).build();
     }
 
-    @GetMapping("/permission-check")
-    public ResponseEntity<?> permissionCheck(){
+    @GetMapping("/profile")
+    public ResponseEntity<?> userProfile(HttpServletRequest request){
+        String email = (String) request.getAttribute("username");
+        UserProfileDto userProfileDto = cookUserService.getUserProfile(email);
+        return ResponseEntity.status(200).body(userProfileDto);
+    }
+
+    @PutMapping("/user-image")
+    public ResponseEntity<?> uploadUserImage(HttpServletRequest request, @RequestBody Map<String, String> userImage){
+        String email = (String) request.getAttribute("username");
+        CookUser cookUser = cookUserService.setUserImage(email,new UserImageDto(userImage.get("image")));
         return ResponseEntity.status(200).build();
     }
-    @GetMapping("/admin-permission-check")
-    public ResponseEntity<?> adminPermissionCheck(){
-        return ResponseEntity.status(200).build();
+
+    @GetMapping("/username/{id}")
+    public ResponseEntity<Map<String,String>> getUsername(@PathVariable String id){
+        Map<String, String> username  = new HashMap<>();
+        username.put("username",cookUserService.getUsernameFromId(id));
+        if(username.get("username") != null){
+            return ResponseEntity.status(200).body(username);
+        }else{
+            return ResponseEntity.status(204).build();
+        }
+    }
+
+    @GetMapping("/favourite-recipes/{id}")
+    public ResponseEntity<Map<String,List<String>>> getFavouriteRecipes(@PathVariable String id){
+        Map<String, List<String>> favouriteRecipes  = new HashMap<>();
+        List<String> recipesId = cookUserService.getUserFavouriteRecipes(id);
+        if(!(recipesId == null)){
+            favouriteRecipes.put("favouriteRecipes",recipesId);
+        }else{
+            favouriteRecipes.put("favouriteRecipes",Collections.emptyList());
+        }
+        return ResponseEntity.status(200).body(favouriteRecipes);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Setter
 @Data
@@ -17,7 +17,5 @@ public class Product {
     @Indexed(unique = true)
     private String ean;
     private String name;
-    private String imageUrl;
-    private boolean isGlutenFree;
-    private List<String> components;
+    private LocalDateTime creationDate;
 }

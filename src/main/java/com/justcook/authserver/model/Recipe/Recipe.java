@@ -3,6 +3,7 @@ package com.justcook.authserver.model.Recipe;
 import com.justcook.authserver.model.Allergens;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.util.List;
 public class Recipe {
     @Id
     private String id;
+    @TextIndexed
     private String title;
     private String description;
     private LocalDateTime creationDate;

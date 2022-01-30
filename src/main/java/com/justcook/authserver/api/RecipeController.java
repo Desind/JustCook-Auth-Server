@@ -1,6 +1,7 @@
 package com.justcook.authserver.api;
 
 import com.justcook.authserver.dto.NewRecipeDto;
+import com.justcook.authserver.dto.PaginatedRecipeDto;
 import com.justcook.authserver.model.Allergens;
 import com.justcook.authserver.dto.CategoryCuisineDto;
 import com.justcook.authserver.model.Recipe.Recipe;
@@ -20,24 +21,34 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.annotations.*;
+
 @Controller
 @RequestMapping("/api")
 @AllArgsConstructor
 @Slf4j
+@Api(value = "Recipe controller", tags = {"Recipes"})
 public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
     private final CookUserServiceImpl cookUserService;
 
-
+    //200 - Correct output
+    //400 - Invalid input
+    //FETCH ALL RECIPES ORDERED BY DATE AND PAGINATED
     @GetMapping("/recipes/{page}")
     public ResponseEntity<List<Recipe>> getAllRecipes(@PathVariable Integer page){
+
+        if (page < 1) {
+            return ResponseEntity.status(400).build();
+        }
         List<Recipe> allRecipes = recipeService.getAllRecipes(page,20);
         return ResponseEntity.status(200).body(allRecipes);
     }
 
     //201 - Correct insert
     //400 - Fields empty
+    //ADD NEW RECIPE DO DATABASE
     @PostMapping("/recipe")
     public ResponseEntity<Recipe> createNewRecipe(HttpServletRequest request, @RequestBody NewRecipeDto recipe){
         String email = String.valueOf(request.getAttribute("username"));
@@ -52,7 +63,7 @@ public class RecipeController {
     @GetMapping("/recipe/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable String id){
         Optional<Recipe> recipe = Optional.ofNullable(recipeService.getRecipeById(id));
-        return recipe.map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(404).build());
+        return recipe.map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(204).build());
     }
 
     @GetMapping("/owner-recipes/{id}")
@@ -73,21 +84,48 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes-with-ingredients")
-    public ResponseEntity<List<Recipe>> getRecipesWithIngredients(@RequestParam List<String> ingredients){
+    public ResponseEntity<PaginatedRecipeDto> getRecipesWithIngredients(@RequestParam List<String> ingredients,
+                                                                        @RequestParam(defaultValue = "1") Integer page,
+                                                                        @RequestParam(defaultValue = "10") Integer pageSize){
         log.info(String.valueOf(ingredients));
-        return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients));
+        return ResponseEntity.status(200).body(recipeService.getRecipesWithIngredients(ingredients, page, pageSize));
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/recipe/categories")
     public ResponseEntity<List<RecipeCategory>> getRecipeCategories(){
         return ResponseEntity.status(200).body(recipeService.getRecipeCategories());
     }
 
-    @GetMapping("/cuisines")
+    @GetMapping("/recipe/cuisines")
     public ResponseEntity<List<RecipeCuisine>> getRecipeCuisines(){
         return ResponseEntity.status(200).body(recipeService.getRecipeCuisines());
     }
 
+    @GetMapping("/allergens")
+    public ResponseEntity<List<Allergens>> getAllergens(){
+        return ResponseEntity.status(200).body(recipeService.getAllergens());
+    }
+
+    @GetMapping("/recipe/query")
+    public ResponseEntity<PaginatedRecipeDto> searchRecipes(@RequestParam String title,
+                                                            @RequestParam List<Allergens> allergens,
+                                                            @RequestParam List<RecipeCategory> categories,
+                                                            @RequestParam List<RecipeCuisine> cuisines,
+                                                            @RequestParam(defaultValue = "1") Integer page,
+                                                            @RequestParam(defaultValue = "10") Integer pageSize) {
+        PaginatedRecipeDto queryRecipes = recipeService.recipeSearch(title,allergens,categories,cuisines,page,pageSize);
+        return ResponseEntity.status(200).body(queryRecipes);
+    }
+
+    @PutMapping("/recipe")
+    public ResponseEntity<?> editRecipe(HttpServletRequest request, @RequestBody Recipe recipe){
+        String email = String.valueOf(request.getAttribute("username"));
+        Recipe updatedRecipe = recipeService.editRecipe(email, recipe);
+        if(updatedRecipe == null){
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(updatedRecipe);
+    }
     @DeleteMapping("/recipe/{id}")
     public ResponseEntity<?> deleteRecipe(HttpServletRequest request, @PathVariable String id){
         String user_id = String.valueOf(request.getAttribute("username"));
@@ -103,4 +141,13 @@ public class RecipeController {
         }
         return ResponseEntity.status(403).build();
     }
+
+    @GetMapping("/recommend-recipes")
+    public ResponseEntity<PaginatedRecipeDto> recommendRecipes(HttpServletRequest request,
+                                                               @RequestParam(defaultValue = "1") Integer page,
+                                                               @RequestParam(defaultValue = "10") Integer pageSize) {
+        String email = String.valueOf(request.getAttribute("username"));
+        return ResponseEntity.status(200).body(recipeService.recommendRecipes(email,page,pageSize));
+    }
+
 }
